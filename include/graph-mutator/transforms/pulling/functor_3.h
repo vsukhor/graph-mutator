@@ -1,0 +1,271 @@
+#ifndef GRAPH_MUTATOR_PULLING_FUNCTOR_3_H
+#define GRAPH_MUTATOR_PULLING_FUNCTOR_3_H
+
+#include "../../definitions.h"
+#include "../../structure/graph.h"
+#include "../../structure/vertices/degrees.h"
+#include "../../to_string.h"
+#include "../vertex_split/functor_1B.h"
+#include "../vertex_merger/functor_10.h"
+#include "../vertex_merger/functor_12.h"
+#include "../vertex_merger/functor_20.h"
+#include "../vertex_merger/functor_22.h"
+#include "common.h"
+#include "functor_base.h"
+#include "log.h"
+#include "paths.h"
+
+
+namespace graph_mutator::pulling {
+
+
+template<Orientation Dir,
+         typename G>
+struct Functor<3, Dir, G>
+    : public FunctorBase<G> {
+
+    static constexpr auto Direction = Dir;
+
+    /// Degree of the pulled vertex.
+    static constexpr auto D = static_cast<Degree>(3);
+    static_assert(is_pullable_degree<D>);
+
+    static constexpr auto d = str1<D>;
+
+    static constexpr auto shortName
+        {graph_mutator::shName<d, 1, 'p', 'u', '_', signchar<Dir>>};
+    static constexpr auto fullName
+        {graph_mutator::shName<d, 1,
+         'P', 'u', 'l', 'l', 'i', 'n', 'g', ' ', 'f', 'r', 'o', 'm', ' ',
+         'V', 'e', 'r', 't', 'e', 'x', ' ', 'D', 'e', 'g', ' ', signchar<Dir>>};
+
+    using Graph = G;
+    using Cmpt = G::Cmpt;
+    using Chain = G::Chain;
+    using Base = FunctorBase<G>;
+    using Ends = Base::Ends;
+    using BulkSlot = Base::BulkSlot;
+    using EndSlot = Base::EndSlot;
+    using Ps = Paths<Cmpt>;
+    using L = Log<Functor<D, Dir, G>>;
+
+    explicit Functor(G& gr);
+
+    /**
+     * @brief Pulls a vertex of degree 3.
+     * @details Pulls the vertex at the end of the path, converting it to a 4-node.
+     * @param pp Path to the vertex to pull.
+     * @param n Number of pulling steps.
+     * @return Result containing the component ID after the pull operation.
+     */
+    auto operator()(
+        Ps& pp,
+        int n
+    ) noexcept -> Res;
+
+protected:
+
+    void check_path(const Ps& pp, const int n) const noexcept;
+
+private:
+
+    using Base::cn;
+    using Base::ct;
+    using Base::gla;
+    using Base::glm;
+
+    // Auxiliary functors for vertex transformations
+    vertex_split::Functor<1, 2, G>  vertex_split_12;  // degree 3 -> 1 + 2
+    vertex_split::Functor<1, 0, G>  vertex_split_10;  // degree 3 -> 1 + 0
+    vertex_merger::Functor<1, 0, G> vertex_merge_10;  // degree 1 + 0 -> 2
+    vertex_merger::Functor<1, 2, G> vertex_merge_12;  // degree 1 + 2 -> 3
+    vertex_merger::Functor<2, 0, G> vertex_merge_20;  // degree 2 + 0 -> 4
+    vertex_merger::Functor<2, 2, G> vertex_merge_22;  // degree 2 + 2 -> 4
+
+    L log;
+
+    void pull(Ps& pp);
+};
+
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+template<Orientation Dir,
+         typename G>
+Functor<3, Dir, G>::
+Functor(G& gr)
+    : Base {gr}
+    , vertex_split_12 {gr}
+    , vertex_split_10 {gr}
+    , vertex_merge_10 {gr}
+    , vertex_merge_12 {gr}
+    , vertex_merge_20 {gr}
+    , vertex_merge_22 {gr}
+    , log {*this}
+{}
+
+
+template<Orientation Dir,
+         typename G>
+auto Functor<3, Dir, G>::
+operator()(
+    Ps& pp,
+    const int n
+) noexcept -> Res
+{
+    if constexpr (verboseF)
+        log.before(pp, n);
+
+    check_path(pp, n);
+
+    pull(pp);  // pull at a chain end connected via a 3-way junction
+
+    this->pull_free_end(pp, n - 1);
+
+    if constexpr (verboseF)
+        log.after(pp);
+
+    return {pp.cmp->ind};
+}
+
+
+/// Pulls at a connected chain end (converting a 3-node into 4-node)
+template<Orientation Dir,
+         typename G>
+void Functor<3, Dir, G>::
+pull(Ps& pp)
+{
+    const auto iD = pp.d.ind;
+    const auto egeD = pp.d.egEnd;
+    auto wD = pp.d.w;
+    auto eD = cn[wD].ind2end(iD, egeD);
+
+    ASSERT(is_defined(eD), "driver of pull<3> is not a chain end.");
+
+    const auto iS = pp.pth.back();
+    auto& cnS = pp.cmp->chain(pp.s.w);
+    const auto egeS = cnS.g[gla[iS]].oriented_end(pp.s.e);
+
+    // cn[wD].ngs[eD].num() == D - 1,
+    // since it is a connected chain end with nn < D, and the
+    // pure loop is excluded by the availability of free ends in the component
+    ASSERT(cn[wD].ngs[eD].num() == 2, "nn != ", 2);
+
+    const std::array ns {cn[wD].ngs[eD][0],
+                         cn[wD].ngs[eD][1]};
+
+    std::array ni {cn[ns[0].w].end2ind(ns[0].e),
+                   cn[ns[1].w].end2ind(ns[1].e)};
+
+    // disconnect iD at the branching (i.e. wD at eD)
+    // in the case if the chain neighboring to wD at eD is a cycle, disconnecting
+    // the driver will result in a disconnected cycle: so use vertex_split_10
+    if (cn[ns[0].w].is_connected_cycle() && ns[0].w == ns[1].w)
+        vertex_split_10(EndSlot{wD, eD});
+    else
+        vertex_split_12(EndSlot{wD, eD});
+
+    wD = glm[iD];
+    if (iD != iS)
+        eD = cn[wD].ind2end(iD, egeD);
+    // otherwise (iD == iS) eD is not changed by the vertex_split_1B above.
+
+    auto wS = glm[iS];
+    auto eS = cn[wS].g[gla[iS]].points_forwards()
+            ? egeS
+            : Ends::opp(egeS);
+
+    pp = Ps {&ct[cn[wS].c],
+             typename Ps::Driver {&cn[glm[iD]].g[gla[iD]], egeD},
+             typename Ps::Source {EndSlot{wS, eS}},
+             pp.pth};
+    this->pull_free_end(pp, 1);
+
+    wD = glm[iD];
+    if (iD != iS)
+        eD = cn[wD].ind2end(iD, egeD);
+
+    wS = glm[iS];
+
+    pp = Ps {&ct[cn[wS].c],
+             typename Ps::Driver {&cn[glm[iD]].g[gla[iD]], egeD},
+             typename Ps::Source {EndSlot{wS, eS}},
+             pp.pth};
+
+    const auto a0 = eD == Ends::A
+                  ? 1
+                  : cn[wD].length() - 1;
+    const auto w1 = glm[ni[0]];
+
+
+    // driver neigbour slots over the branching are part of the path
+    if (const auto pi =
+            std::find(pp.pth.begin(), pp.pth.end(), ni[0]) - pp.pth.begin();
+        pi < static_cast<long int>(pp.pth.size()) - 1)
+        ni[0] = pp.pth[pi + 1];
+
+    if (const auto pi =
+        std::find(pp.pth.begin(), pp.pth.end(), ni[1]) - pp.pth.begin();
+        pi < static_cast<long int>(pp.pth.size()) - 1)
+        ni[1] = pp.pth[pi + 1];
+
+    const auto a1 = std::max(gla[ni[0]], gla[ni[1]]);
+
+    if (iD == iS)
+        cn[w1].is_disconnected_cycle()
+            ? vertex_merge_10(EndSlot{wD, Ends::opp(eD)}, w1)
+            : vertex_merge_12(EndSlot{wD, Ends::opp(eD)}, BulkSlot{w1, a1});
+    else
+        cn[w1].is_disconnected_cycle()
+            ? vertex_merge_20(BulkSlot{wD, a0}, w1)
+            : vertex_merge_22(BulkSlot{wD, a0}, BulkSlot{w1, a1});
+
+    wS = glm[iS];
+    eS = cn[wS].g[gla[iS]].points_forwards()
+       ? egeS
+       : Ends::opp(egeS);
+
+    pp = Ps {&ct[cn[wS].c],
+             typename Ps::Driver {&cn[glm[iD]].g[gla[iD]], egeD},
+             typename Ps::Source {EndSlot{wS, eS}},
+             pp.pth};
+}
+
+
+template<Orientation Dir,
+         typename G>
+void Functor<3, Dir, G>::
+check_path(
+    const Ps& pp,
+    const int n
+) const noexcept
+{
+    const auto c = pp.cmp;
+    const auto pc = pp.pthc;
+    const auto wS = pp.s.w;
+    const auto eS = pp.s.e;
+    const auto wD = pp.d.w;
+    const auto eD = pp.d.end_slot(c->chain(wD)).e;
+
+    ASSERT(c->chain(wD).ngs[eD].num() == 2,
+           "Driver end is not at a three-way junction");
+
+    const auto sourceIsCycle = cn[wS].is_cycle();
+
+    ASSERT(sourceIsCycle ||
+           (!sourceIsCycle && c->chain(wS).ngs[eS].num() == 0),
+           "Source end is not disconnected");
+
+    const auto lenS = this->path_len_at_source_chain(pp);
+
+    ASSERT((!sourceIsCycle &&
+            lenS >= static_cast<EgId>(n)) ||
+           (sourceIsCycle &&
+            lenS >= G::Chain::minCycleLength + static_cast<EgId>(n)),
+           "Pulling over the track longer than the source chain");
+}
+
+
+}  // namespace graph_mutator::pulling
+
+#endif  // GRAPH_MUTATOR_PULLING_FUNCTOR_3_H

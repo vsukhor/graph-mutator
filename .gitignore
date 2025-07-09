@@ -1,0 +1,15 @@
+.DS_Store
+build*/**
+.vscode/**
+docs/html/**
+docs/latex/**
+app/**
+graph_mutator_qt/**
+examples/graph*
+examples/log*
+*.user
+tests/unittests
+tests/bin/
+valgrind-out.txt
+_*_.*
+_*_
