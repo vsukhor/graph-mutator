@@ -24,8 +24,8 @@ limitations under the License.
  * @author Valerii Sukhorukov.
  */
 
-#ifndef GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTER_H
-#define GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTER_H
+#ifndef GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTS_H
+#define GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTS_H
 
 #include "../definitions.h"
 
@@ -37,13 +37,13 @@ namespace graph_mutator::structure {
  * @tparam G Graph class.
  */
 template<typename G>
-struct StructureTester {
+struct IntegralTests {
 
     using Chain = G::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
 
-    explicit StructureTester(const G& gr);
+    explicit IntegralTests(const G& gr);
 
     /**
      * @brief Runs consecutively all the specific tests implemented here.
@@ -118,8 +118,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-StructureTester<G>::
-StructureTester(const G& gr)
+IntegralTests<G>::
+IntegralTests(const G& gr)
     : gr {gr}
     , cn {gr.cn}
     , edgenum {gr.edgenum}
@@ -130,7 +130,7 @@ StructureTester(const G& gr)
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 operator()(const itT it) const
 {
     consistency(it);
@@ -145,7 +145,7 @@ operator()(const itT it) const
 
 /*
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 paths(const itT it) const
 {
     if (!chain_num()) return;
@@ -188,7 +188,7 @@ paths(const itT it) const
 */
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 components(const itT it) const
 {
     const auto nc = gr.chain_num();
@@ -374,7 +374,7 @@ components(const itT it) const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 vertex_numbers(itT it) const
 {
     auto nvct = [&]<Degree D>() -> szt
@@ -448,7 +448,7 @@ vertex_numbers(itT it) const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 loops() const
 {
     for (const auto& m: cn) {
@@ -463,7 +463,7 @@ loops() const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 consistency(const itT it) const
 {
 //    print_chains( "ChC" );
@@ -509,7 +509,7 @@ consistency(const itT it) const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 chain_id(const itT it) const
 {
     for (ChId i=0; i<gr.chain_num(); ++i)
@@ -521,7 +521,7 @@ chain_id(const itT it) const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 edges(const itT it) const
 {
     EgId egn {};
@@ -547,7 +547,7 @@ edges(const itT it) const
 
 
 template<typename G>
-void StructureTester<G>::
+void IntegralTests<G>::
 chain_g(const itT it) const
 {
     EgId egn {};
@@ -572,4 +572,4 @@ chain_g(const itT it) const
 
 }  // namespace graph_mutator::structure
 
-#endif  // GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTER_H
+#endif  // GRAPH_MUTATOR_STRUCTURE_INTEGRAL_TESTS_H
