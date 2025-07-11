@@ -2,7 +2,6 @@
 #define GRAPH_MUTATOR_PULLING_FUNCTOR_2_H
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
 #include "../../structure/graph.h"
 #include "../../to_string.h"
 #include "../vertex_split/functor_11.h"
@@ -332,7 +331,7 @@ check_path(
            (!sourceIsCycle && cn[wS].ngs[eS].num() == 0),
            "Source end is not disconnected");
 
-    const auto lenS = this->path_len_at_source_chain(pp);
+    const auto lenS = pp.length_over_source_chain();
 
     ASSERT(pp.drv().w == pp.src().w ||
            (!sourceIsCycle &&

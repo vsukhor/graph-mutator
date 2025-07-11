@@ -131,6 +131,8 @@ struct Paths
 
     constexpr auto length() const noexcept -> EgId;
 
+    constexpr auto length_over_source_chain() const noexcept -> EgId;
+
     template<typename... Args>
     void print_path(Args... args) const noexcept;
 
@@ -575,6 +577,23 @@ auto Paths<C>::
 driver_end() const noexcept -> Ends::Id
 {
     return cmp->chain(d.w).ind2end(d.ind, d.egEnd);
+}
+
+
+template<typename C>
+constexpr
+auto Paths<C>::
+length_over_source_chain() const noexcept -> EgId
+{
+    EgId n {};
+
+    for (auto it = pthc.crbegin(); it != pthc.rend(); it++)
+        if (cmp->gl[*it].w == s.w)
+            ++n;
+        else
+            break;
+
+    return n;
 }
 
 

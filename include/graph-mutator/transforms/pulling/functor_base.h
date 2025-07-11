@@ -30,15 +30,11 @@ limitations under the License.
 #include <memory>  // unique_ptr
 
 #include "../../definitions.h"
-#include "../../structure/ends.h"
 #include "../../structure/graph.h"
-#include "../../structure/slot.h"
 #include "../edge_creation/functor_old_chain.h"
 #include "../edge_deletion/functor_1.h"
 #include "paths.h"
 
-//#include "../component_deletion/functor.h"
-//#include "../vertex_split/generic.h"
 
 namespace graph_mutator::pulling {
 
@@ -74,35 +70,35 @@ protected:
     Components& ct;  ///< Reference to the graph components.
     G::Chains&  cn;  ///< Reference to the graph edge chains.
 
-    const std::vector<ChId>& glm;
+    const ChIds& glm;
     const EgIds& gla;
 
     auto pull_free_end(Ps& pp, int s) -> bool;
     auto pull_free_end(Ps& pp) -> bool;
-
-    void dissolve_single_edge_chain(Ps& pp);
-
-    void shift_edges_to_target_chain(const Ps& pp);
 
     auto chain_exit_path(
         Path::const_reverse_iterator& rit,
         const Path::const_reverse_iterator& rend
     ) const noexcept -> bool;
 
-    auto path_len_at_source_chain(const Ps& p) const noexcept -> EgId;
-
 private:
 
     // Auxiliary functors
 
     // Creation of an edge at a free end of an existing chain.
-    edge_creation::FunctorOldChain<1, G> edge_create;
+    edge_creation::FunctorOldChain<1, G> create_edge;
 
     // Deletion of a single-edge chain having one end free:
     // for chains having the other end connected via a vertex of degree 3
-    edge_deletion::Functor<1, 3, G> edge_delete_3;
+    edge_deletion::Functor<1, 3, G> delete_edge_3;
     // for chains having the other end connected via a vertex of degree 4
-    edge_deletion::Functor<1, 4, G> edge_delete_4;
+    edge_deletion::Functor<1, 4, G> delete_edge_4;
+
+    void dissolve_single_edge_chain(Ps& pp);
+
+    void shift_edges_to_target_chain(const Ps& pp);
+
+
 };
 
 
@@ -116,9 +112,9 @@ FunctorBase(G& gr)
     , cn {gr.cn}
     , glm {gr.glm}
     , gla {gr.gla}
-    , edge_create {gr}
-    , edge_delete_3 {gr}
-    , edge_delete_4 {gr}
+    , create_edge {gr}
+    , delete_edge_3 {gr}
+    , delete_edge_4 {gr}
 {}
 
 
@@ -203,7 +199,7 @@ dissolve_single_edge_chain(Ps& pp)
     auto& cnS = pp.cmp->chain(wS);
     const auto egeS = cnS.g[gla[iS]].oriented_end(pp.s.e);
 
-    edge_create(pp.s);  // create an edge at the free end of the source chain
+    create_edge(pp.s);  // create an edge at the free end of the source chain
 
     const auto connectedSlot = pp.s.opp();  // the only connected source slot
 
@@ -228,8 +224,8 @@ dissolve_single_edge_chain(Ps& pp)
     ASSERT(nnS == 2 || nnS == 3,
            "trailing chain connection degree is not incorrect: ", nnS);
 
-    nnS == 2 ? edge_delete_3(connectedSlot)
-             : edge_delete_4(connectedSlot);
+    nnS == 2 ? delete_edge_3(connectedSlot)
+             : delete_edge_4(connectedSlot);
 
     // Update the path based on the original edge index of the source
     wS = glm[iS];
@@ -311,20 +307,6 @@ chain_exit_path(
     // the last edge of the current chain to which 'it' now points
     // is the first path element
     return firstElement;
-}
-
-
-template<typename G>
-auto FunctorBase<G>::
-path_len_at_source_chain(const Ps& p) const noexcept -> EgId
-{
-    EgId n {};
-
-    for (auto it = p.pth.crbegin(); it != p.pth.rend(); it++)
-        if (glm[*it] == p.s.w)
-            ++n;
-
-    return n;
 }
 
 

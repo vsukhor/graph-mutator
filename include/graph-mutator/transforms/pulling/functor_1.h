@@ -3,8 +3,6 @@
 
 #include "../../definitions.h"
 #include "../../structure/graph.h"
-#include "../../structure/slot.h"
-#include "../../structure/vertices/degrees.h"
 #include "../../to_string.h"
 #include "common.h"
 #include "functor_base.h"
@@ -13,6 +11,7 @@
 
 
 namespace graph_mutator::pulling {
+
 
 template<Orientation Dir,
          typename G>
@@ -38,13 +37,13 @@ struct Functor<1, Dir, G>
     using Cmpt = Graph::Cmpt;
     using Chain = Graph::Chain;
     using Base = FunctorBase<G>;
-    using L = Log<Functor<D, Dir, G>>;
+    using L = Log<Functor<D, Dir, Graph>>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Pulls a vertex of degree 1.
@@ -79,7 +78,7 @@ private:
 template<Orientation Dir,
          typename G>
 Functor<1, Dir, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : Base {gr}
     , log {*this}
 {}
@@ -130,12 +129,12 @@ check_path(
            (!sourceIsCycle && c->chain(wS).ngs[eS].num() == 0),
            "Source end is not disconnected");
 
-    const auto lenS = this->path_len_at_source_chain(pp);
+    const auto lenS = pp.length_over_source_chain();
 
     ASSERT((!sourceIsCycle &&
             lenS >= static_cast<EgId>(n)) ||
            (sourceIsCycle &&
-            lenS >= G::Chain::minCycleLength + static_cast<EgId>(n)),
+            lenS >= Chain::minCycleLength + static_cast<EgId>(n)),
            "Pulling over the track longer than the source chain");
 }
 
