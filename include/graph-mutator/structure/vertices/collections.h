@@ -71,12 +71,12 @@ struct Collection<0, G> {
     using V = Vertex<0, S>;
     using Container = std::vector<V>;
 
-    const G& gr;  ///< Reference to the graph object.
+    const Graph& gr;  ///< Reference to the graph object.
 
     Container vv;  ///< Boundary vertices of disconnected cycles.
 
     /// Constructs an Updater from the Graph class instance.
-    explicit constexpr Collection(const G& gr)
+    explicit constexpr Collection(const Graph& gr)
         : gr {gr}
     {};
 
@@ -141,12 +141,12 @@ struct Collection<1, G> {
     using V = Vertex<1, S>;
     using Container = std::vector<V>;
 
-    const G& gr;  ///< Reference to the graph object.
+    const Graph& gr;  ///< Reference to the graph object.
 
     Container vv;   ///< Vertices of degree 1.
 
     /// Constructs an Updater from the Graph class instance.
-    explicit constexpr Collection(const G& gr)
+    explicit constexpr Collection(const Graph& gr)
         : gr {gr}
     {};
 
@@ -224,7 +224,7 @@ struct Collection<2, G> {
     using V = Vertex<2, S>;
     using Container = std::vector<V>;
 
-    const G& gr;  ///< Reference to the graph object.
+    const Graph& gr;  ///< Reference to the graph object.
 
     Container vv;   ///< Vertices of degree 2.
 
@@ -301,7 +301,7 @@ struct Collection<3, G> {
     using V = Vertex<3, S>;
     using Container = std::vector<V>;
 
-    const G& gr;  ///< Reference to the graph object.
+    const Graph& gr;  ///< Reference to the graph object.
 
     Container vv;   ///< Vertices of degree 3.
 

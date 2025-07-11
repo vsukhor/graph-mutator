@@ -61,14 +61,14 @@ struct FunctorBase {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit FunctorBase(G& gr);
+    explicit FunctorBase(Graph& gr);
 
 
 protected:
 
-    Graph&      gr;  ///< Refetence to the graph object
-    Components& ct;  ///< Reference to the graph components.
-    G::Chains&  cn;  ///< Reference to the graph edge chains.
+    Graph&         gr;  ///< Reference to the graph object
+    Components&    ct;  ///< Reference to the graph components.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
     const ChIds& glm;
     const EgIds& gla;
@@ -86,19 +86,17 @@ private:
     // Auxiliary functors
 
     // Creation of an edge at a free end of an existing chain.
-    edge_creation::FunctorOldChain<1, G> create_edge;
+    edge_creation::FunctorOldChain<1, Graph> create_edge;
 
     // Deletion of a single-edge chain having one end free:
     // for chains having the other end connected via a vertex of degree 3
-    edge_deletion::Functor<1, 3, G> delete_edge_3;
+    edge_deletion::Functor<1, 3, Graph> delete_edge_3;
     // for chains having the other end connected via a vertex of degree 4
-    edge_deletion::Functor<1, 4, G> delete_edge_4;
+    edge_deletion::Functor<1, 4, Graph> delete_edge_4;
 
     void dissolve_single_edge_chain(Ps& pp);
 
     void shift_edges_to_target_chain(const Ps& pp);
-
-
 };
 
 
@@ -106,7 +104,7 @@ private:
 
 template<typename G>
 FunctorBase<G>::
-FunctorBase(G& gr)
+FunctorBase(Graph& gr)
     : gr {gr}
     , ct {gr.ct}
     , cn {gr.cn}

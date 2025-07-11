@@ -77,7 +77,7 @@ struct Functor<1, 1, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Divides the graph chain at a vertex of degree 2.
@@ -112,14 +112,14 @@ protected:
 
 private:
 
-    vertex_merger::Core<G> merge;
+    vertex_merger::Core<Graph> merge;
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // References to some of graph class fields for convenience.
-    G::Chains&   cn;     ///< Reference to the graph edge chains.
+    Graph::Chains&   cn;     ///< Reference to the graph edge chains.
 
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -127,7 +127,7 @@ private:
 
 template<typename G>
 Functor<1, 1, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : merge {gr, "vm_core called from"s + shortName}
     , gr {gr}
     , cn {gr.cn}

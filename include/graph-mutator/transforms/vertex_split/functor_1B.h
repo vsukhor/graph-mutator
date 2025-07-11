@@ -74,7 +74,7 @@ struct Functor<1, J2_, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Divides the graph at a vertex of degree 3.
@@ -86,13 +86,13 @@ struct Functor<1, J2_, G> {
 private:
 
     ///< Auxiliary low-level routine producing an intermediary state.
-    vertex_merger::Core<G> merge;
+    vertex_merger::Core<Graph> merge;
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
-    G::Chains& cn;  ///< Reference to the graph edge chains.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
-    Log<G> log;
+    Log<Graph> log;
 
 };
 
@@ -102,7 +102,7 @@ private:
 template<Degree J2_,
          typename G>  requires structure::vertices::BulkDegree<J2_>
 Functor<1, J2_, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : merge {gr, "vm_core called from"s + shortName}
     , gr {gr}
     , cn {gr.cn}

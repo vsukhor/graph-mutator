@@ -44,7 +44,8 @@ namespace graph_mutator::vertex_merger {
 template<typename G>
 struct Log {
 
-    using Chain = G::Chain;  ///< Chain type.
+    using Graph = G;
+    using Chain = Graph::Chain;  ///< Chain type.
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
     using Neigs = Chain::Neigs;
@@ -54,7 +55,7 @@ struct Log {
 
     explicit Log(
         const std::string& degs,
-        G& gr,
+        Graph& gr,
         std::string&& ssA={},
         std::string&& ssB={}
     );
@@ -82,10 +83,10 @@ private:
     std::string ssA;
     std::string ssB;
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // References to some of graph class fields for convenience.
-    G::Chains& cn; ///< Reference to the graph edge chains.
+    Graph::Chains& cn; ///< Reference to the graph edge chains.
 };
 
 
@@ -95,7 +96,7 @@ template<typename G>
 Log<G>::
 Log(
     const std::string& degs,
-    G& gr,
+    Graph& gr,
     std::string&& ssA,
     std::string&& ssB
 )

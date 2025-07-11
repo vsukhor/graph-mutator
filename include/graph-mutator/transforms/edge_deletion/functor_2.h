@@ -80,7 +80,7 @@ struct Functor<2, D, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Function call operator executing the deletion using edge index.
@@ -96,7 +96,7 @@ struct Functor<2, D, G> {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 };
 
 
@@ -105,7 +105,7 @@ protected:
 template<Degree D,
          typename G>
 Functor<2, D, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
 {}
 

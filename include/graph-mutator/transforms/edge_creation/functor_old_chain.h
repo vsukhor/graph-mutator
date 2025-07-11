@@ -78,7 +78,7 @@ struct FunctorOldChain {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit FunctorOldChain(G& gr);
+    explicit FunctorOldChain(Graph& gr);
 
     /**
      * @brief Function call operator executing the transformation.
@@ -89,7 +89,7 @@ struct FunctorOldChain {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 };
 
 
@@ -98,7 +98,7 @@ protected:
 template<Degree D,
          typename G>
 FunctorOldChain<D, G>::
-FunctorOldChain(G& gr)
+FunctorOldChain(Graph& gr)
     : gr {gr}
 {}
 

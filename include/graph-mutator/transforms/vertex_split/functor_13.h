@@ -72,7 +72,7 @@ struct Functor<1, 3, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Divides the chain at a vertex of degree 4 to 1+3.
@@ -83,11 +83,11 @@ struct Functor<1, 3, G> {
 
 private:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
-    G::Chains& cn;  ///< Reference to the graph edge chains.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -95,7 +95,7 @@ private:
 
 template<typename G>
 Functor<1, 3, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , log {dd, gr}

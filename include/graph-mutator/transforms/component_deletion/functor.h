@@ -45,7 +45,8 @@ struct Functor {
     static constexpr const char* fullName {"component_deletion"};
     static constexpr const char* shortName {"cmp_de"};
 
-    using Chain = G::Chain;
+    using Graph = G;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;  ///< Chain ends.
     using EndSlot = Chain::EndSlot;
     using ResT = CmpId;
@@ -55,7 +56,7 @@ struct Functor {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Function call operator executing the transformation.
@@ -65,7 +66,7 @@ struct Functor {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 };
 
 
@@ -73,7 +74,7 @@ protected:
 
 template<typename G>
 Functor<G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
 {}
 

@@ -107,7 +107,7 @@ struct All {
      * @param index Reference to global vertex counter.
      * graph compartment is being processed.
      * */
-    template<Degree D> requires (degrees::is_implemented_degree<D>)
+    template<Degree D> requires (is_implemented_degree<D>)
     auto create(
         Id& index,
         CmpId c

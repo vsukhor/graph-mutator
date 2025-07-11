@@ -36,20 +36,20 @@ struct Functor<2, Dir, G>
          'P', 'u', 'l', 'l', 'i', 'n', 'g', ' ', 'f', 'r', 'o', 'm', ' ',
          'V', 'e', 'r', 't', 'e', 'x', ' ', 'D', 'e', 'g', ' ', signchar<Dir>>};
 
+    using Base = FunctorBase<G>;
     using Graph = G;
     using Cmpt = G::Cmpt;
     using Chain = G::Chain;
-    using Base = FunctorBase<G>;
     using Ends = Base::Ends;
     using EndSlot = Base::EndSlot;
     using Ps = Paths<Cmpt>;
-    using L = Log<Functor<D, Dir, G>>;
+    using L = Log<Functor<D, Dir, Graph>>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Pulls a vertex of degree 2.
@@ -102,9 +102,9 @@ protected:
 private:
 
     // Auxiliary functors for vertex transformations
-    vertex_split::Functor<1, 1, G>  vertex_split_11;  // degree 2 -> 1 + 1
-    vertex_merger::Functor<1, 1, G> vertex_merge_11;  // degree 1 + 1 -> 2
-    vertex_merger::Functor<1, 2, G> vertex_merge_12;  // degree 1 + 2 -> 3
+    vertex_split::Functor<1, 1, Graph>  vertex_split_11;  // degree 2 -> 1 + 1
+    vertex_merger::Functor<1, 1, Graph> vertex_merge_11;  // degree 1 + 1 -> 2
+    vertex_merger::Functor<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
 
     L log;
 
@@ -117,7 +117,7 @@ private:
 template<Orientation Dir,
          typename G>
 Functor<2, Dir, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : Base {gr}
     , vertex_split_11 {gr}
     , vertex_merge_11 {gr}

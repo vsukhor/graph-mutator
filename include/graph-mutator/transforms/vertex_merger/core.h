@@ -50,7 +50,8 @@ namespace graph_mutator::vertex_merger {
 template<typename G>
 struct Core {
 
-    using Chain = G::Chain;
+    using Graph = G;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -61,7 +62,7 @@ struct Core {
      * @brief Constructs a Core object from the Graph class instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit constexpr Core(G& gr,
+    explicit constexpr Core(Graph& gr,
                             std::string&& shortName);
 
     /**
@@ -78,8 +79,11 @@ struct Core {
      * @param w1 Index of the 1st chain.
      * @param w2 Index of the 2nd chain.
      */
-    auto antiparallel(Chain::EndId end, ChId w1,
-                      ChId w2) noexcept -> std::array<CmpId, 2>;
+    auto antiparallel(
+        Chain::EndId end,
+        ChId w1,
+        ChId w2
+    ) noexcept -> std::array<CmpId, 2>;
 
     /**
      * @brief Performs merger of free ends of two parallel oriented chains.
@@ -114,14 +118,14 @@ struct Core {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // References to some of graph class fields for convenience.
-    G::Chains& cn;       ///< Reference to the graph edge chains.
+    Graph::Chains& cn;       ///< Reference to the graph edge chains.
 
     const std::string shortName;
 
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -131,7 +135,7 @@ template<typename G>
 constexpr
 Core<G>::
 Core(
-    G& gr,
+    Graph& gr,
     std::string&& shortName
 )
     : gr {gr}

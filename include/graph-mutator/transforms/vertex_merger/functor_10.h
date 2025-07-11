@@ -33,9 +33,7 @@ limitations under the License.
 #include <vector>
 
 #include "../../definitions.h"
-#include "../../structure/ends.h"
-#include "../../structure/slot.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../structure/graph.h"
 #include "../../to_string.h"
 #include "common.h"
 #include "log.h"
@@ -43,7 +41,6 @@ limitations under the License.
 
 namespace graph_mutator::vertex_merger {
 
-template<typename> class Reaction;
 
 /**
  * @brief Merger of a degree 1 vertex to a boundary vertex belonging cycle chain.
@@ -66,7 +63,7 @@ struct Functor<1, 0, G> {
     static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -78,25 +75,26 @@ struct Functor<1, 0, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * Merges a vertex of degree 1 to a boundary vertex in a disconnected cycles.
      * @param s1 Slot on the merged degree 1 vertex.
      * @param w2 Chain index of the cycle chain.
      */
-    auto operator()(const EndSlot& s1,
-                    ChId w2) noexcept -> Res;
+    auto operator()(
+        const EndSlot& s1,
+        ChId w2
+    ) noexcept -> Res;
 
 private:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
-    G::Chains& cn;  ///< Reference to the graph edge chains.
+    // References to some of graph class fields for convenience.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
-//    Core<G> merge;  ///< Low-level free end connector.
-
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -104,10 +102,9 @@ private:
 
 template<typename G>
 Functor<1, 0, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
-//    , merge {gr, shortName}
     , log {dd, gr, {}, "a CYCLE "}
 {}
 

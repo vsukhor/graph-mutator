@@ -493,7 +493,7 @@ set_clagl( const szt c, Graph& gr )
 
 template<typename C>
 bool Paths<C>::
-hasPath(G& gr,
+hasPath(Graph& gr,
     const EgId ind1,
     const EgId ind2
 )  // static

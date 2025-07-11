@@ -43,7 +43,7 @@ struct IntegralTests {
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
 
-    explicit IntegralTests(const G& gr);
+    explicit IntegralTests(const Graph& gr);
 
     /**
      * @brief Runs consecutively all the specific tests implemented here.
@@ -97,13 +97,12 @@ struct IntegralTests {
 
 private:
 
-    const G& gr;  ///< Reference to the graph object.
+    const Graph& gr;  ///< Reference to the graph object.
 
 
     // References to some of graph class fields for convenience:
 
-    const G::Chains& cn;  ///< Reference to the graph edge chains.
-
+    const Graph::Chains& cn;  ///< Reference to the graph edge chains.
     const EgId& edgenum;  ///< Current number of edges.
 
     /// Mapping of indexes: edge to chain.
@@ -119,7 +118,7 @@ private:
 
 template<typename G>
 IntegralTests<G>::
-IntegralTests(const G& gr)
+IntegralTests(const Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , edgenum {gr.edgenum}

@@ -38,17 +38,17 @@ struct Functor<3, Dir, G>
          'P', 'u', 'l', 'l', 'i', 'n', 'g', ' ', 'f', 'r', 'o', 'm', ' ',
          'V', 'e', 'r', 't', 'e', 'x', ' ', 'D', 'e', 'g', ' ', signchar<Dir>>};
 
+    using Base = FunctorBase<G>;
     using Graph = G;
     using Cmpt = G::Cmpt;
     using Chain = G::Chain;
-    using Base = FunctorBase<G>;
     using Ends = Base::Ends;
     using BulkSlot = Base::BulkSlot;
     using EndSlot = Base::EndSlot;
     using Ps = Paths<Cmpt>;
-    using L = Log<Functor<D, Dir, G>>;
+    using L = Log<Functor<D, Dir, Graph>>;
 
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Pulls a vertex of degree 3.
@@ -64,7 +64,8 @@ struct Functor<3, Dir, G>
 
 protected:
 
-    void check_path(const Ps& pp, const int n) const noexcept;
+    void check_path(const Ps& pp,
+                    const int n) const noexcept;
 
 private:
 
@@ -74,12 +75,12 @@ private:
     using Base::glm;
 
     // Auxiliary functors for vertex transformations
-    vertex_split::Functor<1, 2, G>  vertex_split_12;  // degree 3 -> 1 + 2
-    vertex_split::Functor<1, 0, G>  vertex_split_10;  // degree 3 -> 1 + 0
-    vertex_merger::Functor<1, 0, G> vertex_merge_10;  // degree 1 + 0 -> 2
-    vertex_merger::Functor<1, 2, G> vertex_merge_12;  // degree 1 + 2 -> 3
-    vertex_merger::Functor<2, 0, G> vertex_merge_20;  // degree 2 + 0 -> 4
-    vertex_merger::Functor<2, 2, G> vertex_merge_22;  // degree 2 + 2 -> 4
+    vertex_split::Functor<1, 2, Graph>  vertex_split_12;  // degree 3 -> 1 + 2
+    vertex_split::Functor<1, 0, Graph>  vertex_split_10;  // degree 3 -> 1 + 0
+    vertex_merger::Functor<1, 0, Graph> vertex_merge_10;  // degree 1 + 0 -> 2
+    vertex_merger::Functor<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
+    vertex_merger::Functor<2, 0, Graph> vertex_merge_20;  // degree 2 + 0 -> 4
+    vertex_merger::Functor<2, 2, Graph> vertex_merge_22;  // degree 2 + 2 -> 4
 
     L log;
 
@@ -92,7 +93,7 @@ private:
 template<Orientation Dir,
          typename G>
 Functor<3, Dir, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : Base {gr}
     , vertex_split_12 {gr}
     , vertex_split_10 {gr}

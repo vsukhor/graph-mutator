@@ -85,7 +85,7 @@ struct Functor<1, D, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Function call operator executing the deletion using edge index.
@@ -101,13 +101,13 @@ struct Functor<1, D, G> {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // Auxiliary functors.
-    component_deletion::Functor<G> clrem;          ///< Component deletion.
+    component_deletion::Functor<Graph> clrem;          ///< Component deletion.
 
-    vertex_split::Functor<1, D-1, G> disconnectD;  ///< Vertex split (1, D-1).
-    vertex_split::Functor<1, 0, G> disconnect0;    ///< Vertex split (1, 0).
+    vertex_split::Functor<1, D-1, Graph> split_D;  ///< Vertex split (1, D-1).
+    vertex_split::Functor<1, 0, Graph> split_0;    ///< Vertex split (1, 0).
 };
 
 
@@ -116,11 +116,11 @@ protected:
 template<Degree D,
          typename G>
 Functor<1, D, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
     , clrem {gr}
-    , disconnectD {gr}
-    , disconnect0 {gr}
+    , split_D {gr}
+    , split_0 {gr}
 {}
 
 
@@ -164,8 +164,8 @@ operator()(const EndSlot& s) noexcept -> Res
     // change by vertex merger on the chain ends.
 
     const auto cc = D == 3 && gr.cn[ngs[0].w].is_connected_cycle()
-                  ? disconnect0(s)
-                  : disconnectD(s);
+                  ? split_0(s)
+                  : split_D(s);
 
     // index of the disconnected component
     const auto cr = gr.ct[cc[0]].gl[0].i == ind  ? cc[0] : cc[1];

@@ -31,7 +31,6 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
 #include "../vertex_merger/functor_11.h"
 #include "common.h"
 #include "functor_1B.h"
@@ -80,7 +79,7 @@ struct Functor<J1_, J2_, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * @brief Divides the component at a vertex of degree 4.
@@ -100,17 +99,17 @@ struct Functor<J1_, J2_, G> {
 private:
 
     ///< Auxiliary low-level routine producing an intermediate state.
-    vertex_merger::Functor<1, 1, G> merge;
+    vertex_merger::Functor<1, 1, Graph> merge;
 
-    Functor<1, 3, G> div13;  ///< Auxiliary functor.
-    Functor<1, 2, G> div12;  ///< Auxiliary functor.
-    Functor<1, 0, G> div10;  ///< Auxiliary functor.
+    Functor<1, 3, Graph> split_to_13;  ///< Auxiliary functor.
+    Functor<1, 2, Graph> split_to_12;  ///< Auxiliary functor.
+    Functor<1, 0, Graph> split_to_10;  ///< Auxiliary functor.
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
-    G::Chains& cn;  ///< Reference to the graph edge chains.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
-    Log<G> log;
+    Log<Graph> log;
 
     void check_validity(
         const EndSlot& s1,
@@ -127,11 +126,11 @@ template<Degree J1_,
          typename G> requires (structure::vertices::BulkDegree<J1_> and
                                structure::vertices::BulkDegree<J2_>)
 Functor<J1_, J2_, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : merge {gr}
-    , div13 {gr}
-    , div12 {gr}
-    , div10 {gr}
+    , split_to_13 {gr}
+    , split_to_12 {gr}
+    , split_to_10 {gr}
     , gr {gr}
     , cn {gr.cn}
     , log {dd, gr}
@@ -182,11 +181,11 @@ operator()(const EndSlot& _s1,
         }
     }
 
-    div13(s1);
+    split_to_13(s1);
 
     const auto& ngs2 = gr.ngs_at(s2);
-    ngs2[0].w == ngs2[1].w ? div10(s2) :
-                             div12(s2);
+    ngs2[0].w == ngs2[1].w ? split_to_10(s2) :
+                             split_to_12(s2);
 
     const auto ww0 = gr.glm[ind[0]];
     const auto ww1 = gr.glm[ind[1]];

@@ -34,9 +34,10 @@ limitations under the License.
 #include <algorithm>
 #include <ranges>
 #include <string>
+#include <vector>
 
 #include "../../definitions.h"
-#include "../../structure/chain.h"
+#include "../../structure/graph.h"
 
 
 namespace graph_mutator::vertex_split {
@@ -44,7 +45,8 @@ namespace graph_mutator::vertex_split {
 template<typename G>
 struct Log {
 
-    using Chain = G::Chain;
+    using Graph = G;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -54,7 +56,7 @@ struct Log {
 
     explicit Log(
         const std::string& degs,
-        G& gr
+        Graph& gr
     );
 
     template<structure::slot S=EndSlot>
@@ -88,10 +90,10 @@ private:
     std::string degs;
     std::string tag_before {};
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // References to some of graph class fields for convenience.
-    G::Chains& cn; ///< Reference to the graph edge chains.
+    Graph::Chains& cn; ///< Reference to the graph edge chains.
 };
 
 
@@ -101,7 +103,7 @@ template<typename G>
 Log<G>::
 Log(
     const std::string& degs,
-    G& gr
+    Graph& gr
 )
     : degs {degs}
     , gr {gr}

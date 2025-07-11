@@ -86,7 +86,7 @@ struct FunctorNewChain {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit FunctorNewChain(G& gr);
+    explicit FunctorNewChain(Graph& gr);
 
     /**
      * @brief Creates new edge packed into a single-edge chain.
@@ -104,10 +104,10 @@ struct FunctorNewChain {
 
 protected:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
     decltype(gr.cn)& cn;
 
-    vertex_merger::Functor<1, I2, G> merge_vertexes;
+    vertex_merger::Functor<1, I2, Graph> merge_vertexes;
 
 private:
 
@@ -124,7 +124,7 @@ private:
 template<Degree D,
          typename G>
 FunctorNewChain<D, G>::
-FunctorNewChain(G& gr)
+FunctorNewChain(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , merge_vertexes {gr}

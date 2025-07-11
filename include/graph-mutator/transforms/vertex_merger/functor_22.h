@@ -31,16 +31,15 @@ limitations under the License.
 #include <vector>
 
 #include "../../definitions.h"
-#include "../../structure/slot.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../structure/graph.h"
 #include "../../to_string.h"
+#include "../vertex_split/functor_11.h"
 #include "common.h"
 #include "log.h"
 
 
 namespace graph_mutator::vertex_merger {
 
-template<typename> class Reaction;
 
 /**
  * @brief Template specialization for 2V2 -> V4 vertex merger.
@@ -75,7 +74,7 @@ struct Functor<2, 2, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * Merges two vertices of degree 2.
@@ -87,17 +86,15 @@ struct Functor<2, 2, G> {
 
 private:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
     // References to some of graph class fields for convenience.
-    G::Chains& cn;       ///< Reference to the graph edge chains.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
     ///< Auxiliary functor producing a splitted intermediary.
-    vertex_split::Functor<1, 1, G> split_to11;
+    vertex_split::Functor<1, 1, Graph> split_to11;
 
-//    Core<G> merge;  ///< Low-level free end connector.
-
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -105,11 +102,10 @@ private:
 
 template<typename G>
 Functor<2, 2, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , split_to11 {gr}
-//    , merge {gr, shortName}
     , log {dd, gr}
 {}
 

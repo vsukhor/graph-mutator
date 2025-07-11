@@ -32,17 +32,13 @@ limitations under the License.
 #include <vector>
 
 #include "../../definitions.h"
-#include "../../structure/ends.h"
-#include "../../structure/slot.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../structure/graph.h"
 #include "../../to_string.h"
 #include "common.h"
 #include "log.h"
 
 
 namespace graph_mutator::vertex_merger {
-
-template<typename> class Reaction;
 
 
 /**
@@ -78,7 +74,7 @@ struct Functor<1, 3, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(G& gr);
+    explicit Functor(Graph& gr);
 
     /**
      * Merges a vertex of degree 1 to a vertex of degree 3.
@@ -90,13 +86,12 @@ struct Functor<1, 3, G> {
 
 private:
 
-    G& gr;  ///< Reference to the graph object.
+    Graph& gr;  ///< Reference to the graph object.
 
-    G::Chains& cn;  ///< Reference to the graph edge chains.
+    // References to some of graph class fields for convenience.
+    Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
-//    Core<G> merge;  ///< Low-level free end connector.
-
-    Log<G> log;
+    Log<Graph> log;
 };
 
 
@@ -104,7 +99,7 @@ private:
 
 template<typename G>
 Functor<1, 3, G>::
-Functor(G& gr)
+Functor(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
 //    , merge {gr, shortName}
