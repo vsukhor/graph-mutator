@@ -1,5 +1,5 @@
-#ifndef GRAPH_MUTATOR_TO_STRING_H
-#define GRAPH_MUTATOR_TO_STRING_H
+#ifndef GRAPH_MUTATOR_STRING_OPS_H
+#define GRAPH_MUTATOR_STRING_OPS_H
 
 // https://stackoverflow.com/questions/6713420/c-convert-integer-to-string-at-compile-time?noredirect=1&lq=1
 
@@ -8,7 +8,7 @@
 #include <cstdint>
 
 
-namespace graph_mutator {
+namespace graph_mutator::string_ops {
 
 
 template<std::intmax_t N>
@@ -182,6 +182,6 @@ template<std::array c,
 constexpr auto concat = Concat<c, d, N>::bf;
 
 
-}  // namespace graph_mutator
+}  // namespace graph_mutator::string_ops
 
-#endif  // GRAPH_MUTATOR_TO_STRING_H
+#endif  // GRAPH_MUTATOR_STRING_OPS_H
