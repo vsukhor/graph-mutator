@@ -84,6 +84,13 @@ struct Functor<J1_, J2_, G> {
 
     /**
      * @brief Divides the component at a vertex of degree 4.
+     * @param s Slots defining the vertex to split.
+     */
+    auto operator()(const std::array<EndSlot, 2>& s) -> Res;
+
+
+    /**
+     * @brief Divides the component at a vertex of degree 4.
      * @param s1 Slot defining the vertex to split and its 1st edge.
      * @param s2 Slot defining the vertex to split and its 2nd edge.
      */
@@ -129,6 +136,18 @@ Functor(G& gr)
     , cn {gr.cn}
     , log {dd, gr}
 {}
+
+
+// cuts a 4-junction
+template<Degree J1_,
+         Degree J2_,
+         typename G> requires (structure::vertices::BulkDegree<J1_> and
+                               structure::vertices::BulkDegree<J2_>)
+auto Functor<J1_, J2_, G>::
+operator()(const std::array<EndSlot, 2>& s) -> Res
+{
+    return (*this)(s[0], s[1]);
+}
 
 
 // cuts a 4-junction
