@@ -7,8 +7,8 @@
 #include "graph-mutator/structure/edge.h"
 #include "graph-mutator/structure/graph.h"
 #include "graph-mutator/structure/vertices/degrees.h"
-#include "graph-mutator/transforms/edge_creation/functor_new_chain.h"
-#include "graph-mutator/transforms/edge_creation/functor_old_chain.h"
+#include "graph-mutator/transforms/edge_creation/in_new_chain.h"
+#include "graph-mutator/transforms/edge_creation/in_existing_chain.h"
 #include "graph-mutator/transforms/vertex_merger/functor_11.h"
 #include "graph-mutator/transforms/vertex_merger/functor_12.h"
 
@@ -41,20 +41,20 @@ struct VertexMerger
 template<Degree D,
          typename G> requires (is_implemented_degree<D>)
 struct EdgeCreationNewChain
-    : public graph_mutator::edge_creation::FunctorNewChain<D, G> {
+    : public graph_mutator::edge_creation::InNewChain<D, G> {
 
     explicit EdgeCreationNewChain(G& graph)
-        : graph_mutator::edge_creation::FunctorNewChain<D, G> {graph}
+        : graph_mutator::edge_creation::InNewChain<D, G> {graph}
     {}
 };
 
 template<Degree D,
          typename G> requires (is_implemented_degree<D>)
 struct EdgeCreationOldChain
-    : public graph_mutator::edge_creation::FunctorOldChain<D, G> {
+    : public graph_mutator::edge_creation::InExistingChain<D, G> {
 
     explicit EdgeCreationOldChain(G& graph)
-        : graph_mutator::edge_creation::FunctorOldChain<D, G> {graph}
+        : graph_mutator::edge_creation::InExistingChain<D, G> {graph}
     {}
 };
 

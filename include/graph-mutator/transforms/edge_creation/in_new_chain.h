@@ -51,7 +51,7 @@ namespace graph_mutator::edge_creation {
  */
 template<Degree D,
          typename G>
-struct FunctorNewChain {
+struct InNewChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
     static_assert (is_bulk_degree<D> || D == 3);
@@ -85,7 +85,7 @@ struct FunctorNewChain {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit FunctorNewChain(Graph& gr);
+    explicit InNewChain(Graph& gr);
 
     /**
      * @brief Creates new edge packed into a single-edge chain.
@@ -122,8 +122,8 @@ private:
 
 template<Degree D,
          typename G>
-FunctorNewChain<D, G>::
-FunctorNewChain(Graph& gr)
+InNewChain<D, G>::
+InNewChain(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , merge_vertexes {gr}
@@ -133,7 +133,7 @@ FunctorNewChain(Graph& gr)
 // Creates new single-edge chain attached to the original chain.
 template<Degree D,
          typename G>
-auto FunctorNewChain<D, G>::
+auto InNewChain<D, G>::
 operator()(const S s) noexcept -> Res
 {
     const auto w = chain_ind(s);
@@ -175,7 +175,7 @@ operator()(const S s) noexcept -> Res
 
 template<Degree D,
          typename G>
-void FunctorNewChain<D, G>::
+void InNewChain<D, G>::
 check_slot(const S s) const
 {
     const auto w = chain_ind(s);
@@ -208,7 +208,7 @@ check_slot(const S s) const
 template<Degree D,
          typename G>
 constexpr
-auto FunctorNewChain<D, G>::
+auto InNewChain<D, G>::
 chain_ind(const S s) const noexcept -> ChId
 {
     if constexpr (std::is_same_v<S, ChId>)
@@ -227,7 +227,7 @@ chain_ind(const S s) const noexcept -> ChId
 
 template<Degree D,
          typename G>
-auto FunctorNewChain<D, G>::
+auto InNewChain<D, G>::
 pos_str(const S s) const noexcept -> std::string
 {
     if constexpr (D == 0)

@@ -31,7 +31,7 @@ limitations under the License.
 
 #include "../../definitions.h"
 #include "../../structure/graph.h"
-#include "../edge_creation/functor_old_chain.h"
+#include "../edge_creation/in_existing_chain.h"
 #include "../edge_deletion/functor_1.h"
 #include "paths.h"
 
@@ -86,7 +86,7 @@ private:
     // Auxiliary functors
 
     // Creation of an edge at a free end of an existing chain.
-    edge_creation::FunctorOldChain<1, Graph> create_edge;
+    edge_creation::InExistingChain<1, Graph> create_edge;
 
     // Deletion of a single-edge chain having one end free:
     // for chains having the other end connected via a vertex of degree 3

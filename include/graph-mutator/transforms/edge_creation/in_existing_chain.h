@@ -47,7 +47,7 @@ namespace graph_mutator::edge_creation {
  */
 template<Degree D,
          typename G>
-struct FunctorOldChain {
+struct InExistingChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
     static_assert (D <= maxDegree);
@@ -76,7 +76,7 @@ struct FunctorOldChain {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit FunctorOldChain(Graph& gr);
+    explicit InExistingChain(Graph& gr);
 
     /**
      * @brief Function call operator executing the transformation.
@@ -95,8 +95,8 @@ protected:
 
 template<Degree D,
          typename G>
-FunctorOldChain<D, G>::
-FunctorOldChain(Graph& gr)
+InExistingChain<D, G>::
+InExistingChain(Graph& gr)
     : gr {gr}
 {}
 
@@ -104,7 +104,7 @@ FunctorOldChain(Graph& gr)
 template<Degree D,
          typename G>
 template<typename S> requires structure::slot<S>
-auto FunctorOldChain<D, G>::
+auto InExistingChain<D, G>::
 operator()(const S& s) noexcept -> Res
 {
     const auto [w, ae] = s.we();
