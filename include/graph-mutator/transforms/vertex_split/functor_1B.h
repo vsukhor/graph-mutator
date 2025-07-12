@@ -31,7 +31,8 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../string_ops.h"
+#include "../../structure/graph.h"
 #include "../vertex_merger/core.h"
 #include "common.h"
 #include "log.h"
@@ -48,7 +49,7 @@ namespace graph_mutator::vertex_split {
  * @tparam G Graph class on which it operates.
  */
 template<Degree J2_,
-         typename G> requires structure::vertices::BulkDegree<J2_>
+         typename G> requires BulkDegree<J2_>
 struct Functor<1, J2_, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
@@ -59,12 +60,12 @@ struct Functor<1, J2_, G> {
     static constexpr auto I2 = undefined<Degree>;       ///< No 2nd input vertex.
     static constexpr auto I = I1;                       ///< Input vertex degree.
 
-    static constexpr auto dd = str2<J1, J2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<J1, J2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using ResT = CmpId;
@@ -100,7 +101,7 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<Degree J2_,
-         typename G>  requires structure::vertices::BulkDegree<J2_>
+         typename G>  requires BulkDegree<J2_>
 Functor<1, J2_, G>::
 Functor(Graph& gr)
     : merge {gr, "vm_core called from"s + shortName}
@@ -111,7 +112,7 @@ Functor(Graph& gr)
 
 
 template<Degree J2_,
-         typename G>  requires structure::vertices::BulkDegree<J2_>
+         typename G>  requires BulkDegree<J2_>
 auto Functor<1, J2_, G>::
 operator()(const EndSlot& s) -> Res
 {
@@ -171,7 +172,7 @@ operator()(const EndSlot& s) -> Res
     }
 
 //    gr.update_books();
-//    if constexpr (G::useAgl) {
+//    if constexpr (Graph::useAgl) {
 //        gr.update_adjacency_edges(ind1);
 //        gr.update_adjacency_edges(ind2);
 //    }

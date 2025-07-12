@@ -2,8 +2,8 @@
 #define GRAPH_MUTATOR_PULLING_FUNCTOR_3_H
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "../vertex_split/functor_1B.h"
 #include "../vertex_merger/functor_10.h"
 #include "../vertex_merger/functor_12.h"
@@ -29,22 +29,22 @@ struct Functor<3, Dir, G>
     static constexpr auto D = static_cast<Degree>(3);
     static_assert(is_pullable_degree<D>);
 
-    static constexpr auto d = str1<D>;
+    static constexpr auto d = string_ops::str1<D>;
 
     static constexpr auto shortName
-        {graph_mutator::shName<d, 1, 'p', 'u', '_', signchar<Dir>>};
+        {string_ops::shName<d, 1, 'p', 'u', '_', signchar<Dir>>};
     static constexpr auto fullName
-        {graph_mutator::shName<d, 1,
+        {string_ops::shName<d, 1,
          'P', 'u', 'l', 'l', 'i', 'n', 'g', ' ', 'f', 'r', 'o', 'm', ' ',
          'V', 'e', 'r', 't', 'e', 'x', ' ', 'D', 'e', 'g', ' ', signchar<Dir>>};
 
     using Base = FunctorBase<G>;
     using Graph = G;
-    using Cmpt = G::Cmpt;
-    using Chain = G::Chain;
-    using Ends = Base::Ends;
-    using BulkSlot = Base::BulkSlot;
-    using EndSlot = Base::EndSlot;
+    using Cmpt = Graph::Cmpt;
+    using Chain = Graph::Chain;
+    using Ends = Chain::Ends;
+    using BulkSlot = Chain::BulkSlot;
+    using EndSlot = Chain::EndSlot;
     using Ps = Paths<Cmpt>;
     using L = Log<Functor<D, Dir, Graph>>;
 
@@ -260,7 +260,7 @@ check_path(
     ASSERT((!sourceIsCycle &&
             lenS >= static_cast<EgId>(n)) ||
            (sourceIsCycle &&
-            lenS >= G::Chain::minCycleLength + static_cast<EgId>(n)),
+            lenS >= Chain::minCycleLength + static_cast<EgId>(n)),
            "Pulling over the track longer than the source chain");
 }
 

@@ -14,7 +14,7 @@ namespace graph_mutator::tests::graph {
 
 using namespace structure;
 
-using G = Graph<Chain<Edge<vertices::maxDegree>>>;
+using G = Graph<Chain<Edge<maxDegree>>>;
 using Chain = G::Chain;
 using Eg = Chain::Edge;
 using Ends = Chain::Ends;
@@ -25,8 +25,8 @@ using BSlot = Chain::BulkSlot;
 /// Subclass to make protected members accessible for testing:
 template<Degree D1,
          Degree D2,
-         typename G> requires (vertices::is_implemented_degree<D1> &&
-                               vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct VertexMerger
     : public vertex_merger::Functor<D1, D2, G> {
 
@@ -38,8 +38,6 @@ struct VertexMerger
 
 class GraphTest
     : public Test {
-
-protected:
 };
 
 // =============================================================================

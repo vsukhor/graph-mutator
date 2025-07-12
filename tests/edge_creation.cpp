@@ -17,7 +17,7 @@ namespace graph_mutator::tests::edge_creation {
 
 using namespace graph_mutator;
 
-using G = structure::Graph<structure::Chain<structure::Edge<structure::vertices::maxDegree>>>;
+using G = structure::Graph<structure::Chain<structure::Edge<maxDegree>>>;
 using Chain = G::Chain;
 using Edge = Chain::Edge;
 using Ends = Chain::Ends;
@@ -27,8 +27,8 @@ using BSlot = Chain::BulkSlot;
 /// Subclass to make protected members accessible for testing:
 template<Degree D1,
          Degree D2,
-         typename G> requires (structure::vertices::is_implemented_degree<D1> &&
-                               structure::vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct VertexMerger
     : public vertex_merger::Functor<D1, D2, G> {
 
@@ -39,7 +39,7 @@ struct VertexMerger
 
 /// Subclass to make protected members accessible for testing:
 template<Degree D,
-         typename G> requires (structure::vertices::is_implemented_degree<D>)
+         typename G> requires (is_implemented_degree<D>)
 struct EdgeCreationNewChain
     : public graph_mutator::edge_creation::FunctorNewChain<D, G> {
 
@@ -49,7 +49,7 @@ struct EdgeCreationNewChain
 };
 
 template<Degree D,
-         typename G> requires (structure::vertices::is_implemented_degree<D>)
+         typename G> requires (is_implemented_degree<D>)
 struct EdgeCreationOldChain
     : public graph_mutator::edge_creation::FunctorOldChain<D, G> {
 

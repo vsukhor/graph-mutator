@@ -28,9 +28,8 @@ limitations under the License.
 #define GRAPH_MUTATOR_EDGE_CREATION_FUNCTOR_NEW_CHAIN_H
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
-#include "../../to_string.h"
 #include "../component_creation/functor.h"
 #include "../vertex_merger/functor_10.h"
 #include "../vertex_merger/functor_11.h"
@@ -55,7 +54,7 @@ template<Degree D,
 struct FunctorNewChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
-    static_assert (structure::vertices::is_bulk_degree<D> || D == 3);
+    static_assert (is_bulk_degree<D> || D == 3);
 
     static constexpr auto isNewChain = true;
 
@@ -66,13 +65,13 @@ struct FunctorNewChain {
                              ? static_cast<Degree>(3)
                              : I2 + static_cast<Degree>(1);
 
-    static constexpr auto d {str1<I2>};
-    static constexpr auto shortName {graph_mutator::shName<d, 1, 'e', 'c', '_', 'n'>};
+    static constexpr auto d {string_ops::str1<I2>};
+    static constexpr auto shortName {string_ops::shName<d, 1, 'e', 'c', '_', 'n'>};
     static constexpr const char* fullName {"edge_creation_new_chain"};
 
     using Graph = G;
-    using Edge = G::Edge;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
+    using Edge = Chain::Edge;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;

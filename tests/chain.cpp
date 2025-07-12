@@ -13,7 +13,7 @@ class ChainTest
 
 protected:
 
-    using Edge = structure::Edge<structure::vertices::maxDegree>;
+    using Edge = structure::Edge<maxDegree>;
     using Ends = Edge::Ends;
     using Chain = structure::Chain<Edge>;
     using BulkSlot = Chain::BulkSlot;

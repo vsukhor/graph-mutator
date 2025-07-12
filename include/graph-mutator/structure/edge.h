@@ -50,9 +50,9 @@ template<typename> class Chain;
 template<Degree D>
 struct Edge {
 
-    static_assert(D <= vertices::maxDegree);
+    static_assert(D <= maxDegree);
 
-    static constexpr auto maxVertexDegree = vertices::maxDegree;
+    static constexpr auto maxVertexDegree = maxDegree;
 
     using Id = EgId;
     using Ends = structure::Ends;  ///< Edge ends.
@@ -389,7 +389,7 @@ check(const Id maxInd,
               "ind ", ind, ": ", "weight = ", weight, ", maxWeight = ", maxWeight);
 }
 
-using EdgeBase = Edge<vertices::maxDegree>;
+using EdgeBase = Edge<maxDegree>;
 
 }  // namespace graph_mutator::structure
 

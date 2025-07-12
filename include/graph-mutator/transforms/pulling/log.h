@@ -29,7 +29,6 @@ limitations under the License.
 
 #include <array>
 
-#include "../../structure/vertices/degrees.h"
 #include "paths.h"  // because of Log
 
 
@@ -41,11 +40,12 @@ struct Log {
 
 using Ps = Paths<typename F::Cmpt>;
 
-const F& ftr;
+const F& functor;
 
-explicit Log(const F& ftr)
-    : ftr {ftr}
+explicit Log(const F& functor)
+    : functor {functor}
 {}
+
 
 void before(
     const Ps& pp,

@@ -235,7 +235,7 @@ struct Graph {
      * @brief Number of vertices for the specific vertex degree.
      * @tparam I Vertex degree.
      */
-    template<Degree D> requires (D <= vertices::maxDegree)
+    template<Degree D> requires (D <= maxDegree)
     auto num_vertices() const noexcept -> szt;
 
     /// Total number of vertices.
@@ -1214,7 +1214,7 @@ ng_inds_at(const EndSlot& s) const noexcept -> EgIds
 
 
 template<typename Ch>
-template<Degree D> requires (D <= vertices::maxDegree)
+template<Degree D> requires (D <= maxDegree)
 auto Graph<Ch>::
 num_vertices() const noexcept -> szt
 {

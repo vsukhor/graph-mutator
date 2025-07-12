@@ -48,12 +48,12 @@ struct FunctorBase {
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
     using Graph = G;
-    using Cmpt = G::Cmpt;
-    using Chain = G::Chain;
+    using Cmpt = Graph::Cmpt;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using BulkSlot = Chain::BulkSlot;
     using EndSlot = Chain::EndSlot;
-    using Components = G::Components;
+    using Components = Graph::Components;
     using Ps = Paths<Cmpt>;
     using Path = typename Ps::Path;
 

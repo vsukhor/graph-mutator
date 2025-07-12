@@ -25,8 +25,8 @@ TEST_F(Pull_1, SingleLinChain_DrA)
     if constexpr (verboseT)
         print_description(
             "Tests pulling degree 1 of a compartment consisting of a single ",
-            "linear chain.\nThe chain is driven at its end A. \nThis is a trivial ",
-            "case of a standalone chain where no change is induced."
+            "linear chain.\nThe chain is driven at its end A. \nThis is a ",
+            "trivial case of a standalone chain where no change is induced."
         );
 
     // Create initial graph.

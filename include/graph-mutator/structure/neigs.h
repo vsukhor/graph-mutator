@@ -49,7 +49,7 @@ namespace graph_mutator::structure {
 template<typename S>
 struct Neigs {
 
-    static constexpr auto maxNum = vertices::maxDegree - 1;
+    static constexpr auto maxNum = maxDegree - 1;
 
     template<typename T>
     using container = std::vector<T>;

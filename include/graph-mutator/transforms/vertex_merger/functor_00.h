@@ -31,8 +31,8 @@ limitations under the License.
 #include <vector>
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "../vertex_split/functor_11.h"
 #include "common.h"
 #include "log.h"
@@ -57,12 +57,12 @@ struct Functor<0, 0, G> {
     static constexpr auto J1 = static_cast<Degree>(4);  ///< Degree of the 1st output vertex.
     static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
 
-    static constexpr auto dd = str2<I1, I2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<I1, I2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -91,7 +91,7 @@ private:
     Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
     ///< Auxiliary functor producing a splitted intermediary.
-    vertex_split::Functor<1, 1, Graph> split_to11;
+    vertex_split::Functor<1, 1, Graph> split_to_11;
 
     Log<Graph> log;
 };
@@ -104,8 +104,7 @@ Functor<0, 0, G>::
 Functor(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
-    , split_to11 {gr}
-//    , merge {gr, shortName}
+    , split_to_11 {gr}
     , log {dd, gr, "a disconnected CYCLE ", "a disconnected CYCLE "}
 {}
 
@@ -135,8 +134,8 @@ operator()(
 
     // Produce a disconnected intermediary:
 
-    split_to11(BulkSlot{w1, 0});    // produces: cn[w1] with both ends free
-    split_to11(BulkSlot{w2, 0});    // produces: cn[w2] with both ends free
+    split_to_11(BulkSlot{w1, 0});    // produces: cn[w1] with both ends free
+    split_to_11(BulkSlot{w2, 0});    // produces: cn[w2] with both ends free
 
     // Connect slots at free ends:
 

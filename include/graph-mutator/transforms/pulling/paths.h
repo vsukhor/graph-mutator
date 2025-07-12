@@ -76,7 +76,7 @@ struct Paths
 
     template<Degree D,
              Orientation Dir,
-             typename G> requires (structure::vertices::is_implemented_degree<D>)
+             typename G> requires (is_implemented_degree<D>)
         friend struct Functor;
 
     using Base::cmp;

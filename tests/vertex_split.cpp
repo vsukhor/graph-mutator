@@ -22,7 +22,7 @@
 
 namespace graph_mutator::tests::vertex_split {
 
-using G = structure::Graph<structure::Chain<structure::Edge<structure::vertices::maxDegree>>>;
+using G = structure::Graph<structure::Chain<structure::Edge<maxDegree>>>;
 using Chain = G::Chain;
 using Edge = Chain::Edge;
 using Ends = Chain::Ends;

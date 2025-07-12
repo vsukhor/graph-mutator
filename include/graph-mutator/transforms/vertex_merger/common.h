@@ -30,7 +30,6 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
 
 
 namespace graph_mutator::vertex_merger {

@@ -2,8 +2,8 @@
 #define GRAPH_MUTATOR_PULLING_FUNCTOR_1_H
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "common.h"
 #include "functor_base.h"
 #include "log.h"
@@ -24,12 +24,12 @@ struct Functor<1, Dir, G>
     static constexpr auto D = static_cast<Degree>(1);
     static_assert(is_pullable_degree<D>);
 
-    static constexpr auto d = str1<D>;
+    static constexpr auto d = string_ops::str1<D>;
 
     static constexpr auto shortName
-        {graph_mutator::shName<d, 1, 'p', 'u', '_', signchar<Dir>>};
+        {string_ops::shName<d, 1, 'p', 'u', '_', signchar<Dir>>};
     static constexpr auto fullName
-        {graph_mutator::shName<d, 1,
+        {string_ops::shName<d, 1,
          'P', 'u', 'l', 'l', 'i', 'n', 'g', ' ', 'f', 'r', 'o', 'm', ' ',
          'V', 'e', 'r', 't', 'e', 'x', ' ', 'D', 'e', 'g', ' ', signchar<Dir>>};
 

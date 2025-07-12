@@ -28,14 +28,12 @@ limitations under the License.
 #define GRAPH_MUTATOR_EDGE_DELETION_FUNCTOR_1_H
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "../component_deletion/functor.h"
 #include "../vertex_split/functor_1B.h"
 #include "../vertex_split/functor_13.h"
 #include "common.h"
-
 
 
 /**
@@ -55,12 +53,12 @@ template<Degree D,
          typename G>
 struct Functor<1, D, G> {
 
-    static_assert(structure::vertices::is_junction_degree<D>);
+    static_assert(is_junction_degree<D>);
 
     static_assert(std::is_base_of_v<structure::GraphBase, G>);
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
     using ResT = CmpId;
@@ -70,6 +68,7 @@ struct Functor<1, D, G> {
 
     /// This is a single-edge chain, so one of the edge ends has degree 1.
     static constexpr auto I1 = static_cast<Degree>(1);
+
     /// This is a single-edge connected chain, so one of the edge ends is a (3-way or 4-way) junction.
     static constexpr auto I2 = D;
 
@@ -77,9 +76,9 @@ struct Functor<1, D, G> {
                                       : undefined<Degree>;
     static constexpr auto J2 = I2 - 1;
 
-    static constexpr auto dd = str2<I1, I2>;
-    static constexpr auto shortName = concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<I1, I2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.

@@ -56,7 +56,7 @@ namespace graph_mutator::structure::vertices {
 template<typename G>
 struct All {
 
-    static_assert(vertices::maxDegree == 4);
+    static_assert(maxDegree == 4);
 
     template<Degree D> requires (is_implemented_degree<D>)
 

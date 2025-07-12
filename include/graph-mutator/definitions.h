@@ -41,6 +41,8 @@ limitations under the License.
 #include "utils/msgr.h"
 #include "utils/random/with_boost.h"
 
+#include "structure/vertices/degrees.h"
+
 namespace graph_mutator {
 inline namespace definitions {
 
@@ -50,6 +52,8 @@ inline constexpr auto zip = std::views::zip;
 
 using colorcodes = utils::Colorcodes;
 using szt = std::size_t;
+
+using namespace structure::vertices::degrees;
 
 template<typename T>
 concept numerically_limited = std::numeric_limits<T>::is_specialized;
@@ -113,8 +117,6 @@ inline constexpr bool print_edges {true};
 
 /// Toggles integral testing on and off.
 inline constexpr bool integral_testing {true};
-
-using Degree = unsigned int;
 
 // Typenames for ids of structural elements and theirr containers.
 

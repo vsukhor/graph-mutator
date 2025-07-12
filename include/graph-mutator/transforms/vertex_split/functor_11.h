@@ -34,8 +34,8 @@ limitations under the License.
 #include <iostream>
 
 #include "../../definitions.h"
-#include "../../structure/ends.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../string_ops.h"
+#include "../../structure/graph.h"
 #include "../vertex_merger/core.h"
 #include "common.h"
 #include "log.h"
@@ -61,12 +61,12 @@ struct Functor<1, 1, G> {
     static constexpr auto I2 = undefined<Degree>;  ///< No 2nd input vertex.
     static constexpr auto I = I1;                  ///< Input vertex degree.
 
-    static constexpr auto dd = str2<J1, J2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<J1, J2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -176,7 +176,7 @@ disconnected_cycle_d0(const ChId w) -> Res
     gr.ct[m.c].chis.cn22 = undefined<ChId>;
 
     gr.update_books();
-    if constexpr (G::useAgl) {
+    if constexpr (Graph::useAgl) {
         gr.update_adjacency_edges(ind1);
         gr.update_adjacency_edges(ind2);
     }
@@ -231,7 +231,7 @@ disconnected_cycle_d2(const BulkSlot& s) -> Res
     cmp.chis.cn22 = undefined<ChId>;
 
     gr.update_books();
-    if constexpr (G::useAgl) {
+    if constexpr (Graph::useAgl) {
         gr.update_adjacency_edges(ind1);
         gr.update_adjacency_edges(ind2);
     }
@@ -287,7 +287,7 @@ linear(const BulkSlot& s) -> Res
     const auto isConnected = cn[w].is_connected_at(ss.e);
     bool isCycled {};
     if (isConnected) {
-        typename G::PathsOverEndSlots pp {gr.ct[clini]};
+        typename Graph::PathsOverEndSlots pp {gr.ct[clini]};
     // this is true iff there is a connection to s2 via a path outgoing from 's'
     // knownSize is true: enumertate over the cluster
         isCycled = pp.template are_connected<false>(ss, ss.opp());
@@ -309,7 +309,7 @@ linear(const BulkSlot& s) -> Res
 
     if (!isConnected) {
         gr.ct.emplace_back(n, gr.cmpt_num(), cn);
-        gr.ct[cn[w].c] = typename G::Cmpt {gr.ct[cn[w].c].ww, cn[w].c, cn};
+        gr.ct[cn[w].c] = typename Graph::Cmpt {gr.ct[cn[w].c].ww, cn[w].c, cn};
     }
     else {
         auto& current = gr.ct[cn[w].c];
@@ -326,7 +326,7 @@ linear(const BulkSlot& s) -> Res
     }
 
     gr.update_books();
-    if constexpr (G::useAgl) {
+    if constexpr (Graph::useAgl) {
         gr.update_adjacency_edges(ind1);
         gr.update_adjacency_edges(ind2);
     }

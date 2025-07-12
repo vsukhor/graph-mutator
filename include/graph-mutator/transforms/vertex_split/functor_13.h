@@ -31,7 +31,8 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
-#include "../../structure/vertices/degrees.h"
+#include "../../string_ops.h"
+#include "../../structure/graph.h"
 #include "common.h"
 #include "log.h"
 
@@ -56,12 +57,12 @@ struct Functor<1, 3, G> {
     static constexpr auto I2 = undefined<Degree>;  ///< No 2nd input vertex.
     static constexpr auto I = I1;                  ///< Input vertex degree.
 
-    static constexpr auto dd = str2<J1, J2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<J1, J2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -136,7 +137,7 @@ operator()(const EndSlot& s) -> Res
         gr.ct.back().set_chis();
 
     gr.update_books();
-    if constexpr (G::useAgl)
+    if constexpr (Graph::useAgl)
         for (const auto ii: ind)
             gr.update_adjacency_edges(ii);
 

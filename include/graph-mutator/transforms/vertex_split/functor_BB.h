@@ -31,6 +31,7 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../vertex_merger/functor_11.h"
 #include "common.h"
 #include "functor_1B.h"
@@ -51,8 +52,8 @@ namespace graph_mutator::vertex_split {
  */
 template<Degree J1_,
          Degree J2_,
-         typename G> requires (structure::vertices::BulkDegree<J1_> and
-                               structure::vertices::BulkDegree<J2_>)
+         typename G> requires (BulkDegree<J1_> and
+                               BulkDegree<J2_>)
 struct Functor<J1_, J2_, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
@@ -63,12 +64,12 @@ struct Functor<J1_, J2_, G> {
     static constexpr auto I2 = undefined<Degree>;       ///< No 2nd input vertex.
     static constexpr auto I = I1;                       ///< Input vertex degree.
 
-    static constexpr auto dd = str2<J1, J2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<J1, J2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
@@ -86,7 +87,6 @@ struct Functor<J1_, J2_, G> {
      * @param s Slots defining the vertex to split.
      */
     auto operator()(const std::array<EndSlot, 2>& s) -> Res;
-
 
     /**
      * @brief Divides the component at a vertex of degree 4.
@@ -115,7 +115,6 @@ private:
         const EndSlot& s1,
         const EndSlot& s2
     ) const noexcept;
-
 };
 
 
@@ -123,8 +122,8 @@ private:
 
 template<Degree J1_,
          Degree J2_,
-         typename G> requires (structure::vertices::BulkDegree<J1_> and
-                               structure::vertices::BulkDegree<J2_>)
+         typename G> requires (BulkDegree<J1_> and
+                               BulkDegree<J2_>)
 Functor<J1_, J2_, G>::
 Functor(Graph& gr)
     : merge {gr}
@@ -140,8 +139,8 @@ Functor(Graph& gr)
 // cuts a 4-junction
 template<Degree J1_,
          Degree J2_,
-         typename G> requires (structure::vertices::BulkDegree<J1_> and
-                               structure::vertices::BulkDegree<J2_>)
+         typename G> requires (BulkDegree<J1_> and
+                               BulkDegree<J2_>)
 auto Functor<J1_, J2_, G>::
 operator()(const std::array<EndSlot, 2>& s) -> Res
 {
@@ -152,8 +151,8 @@ operator()(const std::array<EndSlot, 2>& s) -> Res
 // cuts a 4-junction
 template<Degree J1_,
          Degree J2_,
-         typename G> requires (structure::vertices::BulkDegree<J1_> and
-                               structure::vertices::BulkDegree<J2_>)
+         typename G> requires (BulkDegree<J1_> and
+                               BulkDegree<J2_>)
 auto Functor<J1_, J2_, G>::
 operator()(const EndSlot& _s1,
            const EndSlot& _s2) -> Res
@@ -207,8 +206,8 @@ operator()(const EndSlot& _s1,
 
 template<Degree J1_,
          Degree J2_,
-         typename G> requires (structure::vertices::BulkDegree<J1_> and
-                               structure::vertices::BulkDegree<J2_>)
+         typename G> requires (BulkDegree<J1_> and
+                               BulkDegree<J2_>)
 void Functor<J1_, J2_, G>::
 check_validity(
     const EndSlot& s1,

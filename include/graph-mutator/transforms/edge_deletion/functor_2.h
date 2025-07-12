@@ -28,9 +28,8 @@ limitations under the License.
 #define GRAPH_MUTATOR_EDGE_DELETION_FUNCTOR_2_H
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
-#include "../../to_string.h"
 #include "common.h"
 
 
@@ -53,10 +52,10 @@ template<Degree D,
 struct Functor<2, D, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
-    static_assert(structure::vertices::is_implemented_degree<D>);
+    static_assert(is_implemented_degree<D>);
 
     using Graph = G;
-    using Chain = G::Chain;
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using BulkSlot = Chain::BulkSlot;
     using ResT = CmpId;
@@ -72,9 +71,9 @@ struct Functor<2, D, G> {
     static constexpr auto J1 = undefined<Degree>;
     static constexpr auto J2 = undefined<Degree>;
 
-    static constexpr auto dd = str2<I1, I2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<I1, I2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.

@@ -31,7 +31,6 @@ limitations under the License.
 
 #include "../../definitions.h"
 #include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
 
 
 namespace graph_mutator::pulling {
@@ -60,7 +59,7 @@ constexpr char signchar = Dir == Orientation::Backwards ? '-' : '+';
  */
 template<Degree D,
          Orientation Dir,
-         typename G> requires (structure::vertices::is_implemented_degree<D>)
+         typename G> requires (is_implemented_degree<D>)
 struct Functor {};
 
 

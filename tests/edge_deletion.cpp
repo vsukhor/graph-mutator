@@ -3,10 +3,10 @@
 #include <string>
 
 #include "common.h"
+#include "graph-mutator/definitions.h"
 #include "graph-mutator/structure/chain.h"
 #include "graph-mutator/structure/edge.h"
 #include "graph-mutator/structure/graph.h"
-#include "graph-mutator/structure/vertices/degrees.h"
 #include "graph-mutator/transforms/edge_deletion/functor_1.h"
 #include "graph-mutator/transforms/edge_deletion/functor_2.h"
 #include "graph-mutator/transforms/vertex_merger/functor_11.h"
@@ -15,7 +15,7 @@
 
 namespace graph_mutator::tests::edge_deletion {
 
-using G = structure::Graph<structure::Chain<structure::Edge<structure::vertices::maxDegree>>>;
+using G = structure::Graph<structure::Chain<structure::Edge<maxDegree>>>;
 using Chain = G::Chain;
 using Edge = Chain::Edge;
 using Ends = Chain::Ends;
@@ -26,8 +26,8 @@ using BSlot = Chain::BulkSlot;
 /// Subclass to make protected members accessible for testing:
 template<Degree D1,
          Degree D2,
-         typename G> requires (structure::vertices::is_implemented_degree<D1> &&
-                               structure::vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct VertexMerger
     : public graph_mutator::vertex_merger::Functor<D1, D2, G> {
 
@@ -40,8 +40,8 @@ struct VertexMerger
 /// Subclass to make protected members accessible for testing:
 template<Degree D1,
          Degree D2,
-         typename G> requires (structure::vertices::is_implemented_degree<D1> &&
-                               structure::vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct EdgeDeletion
     : public graph_mutator::edge_deletion::Functor<D1, D2, G> {
 

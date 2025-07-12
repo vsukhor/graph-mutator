@@ -59,7 +59,7 @@ namespace graph_mutator::structure {
 template<typename E4>
 struct Chain {
 
-    static_assert(E4::maxVertexDegree == vertices::maxDegree);
+    static_assert(E4::maxVertexDegree == maxDegree);
     static_assert(std::is_base_of_v<structure::EdgeBase, E4>);
 
     using Id = ChId;
@@ -74,7 +74,7 @@ struct Chain {
     using Neigs = structure::Neigs<EndSlot>;  ///< Slots connected to the chain ends.
     using thisT = Chain<Edge>;
 
-    template<vertices::Degree D>
+    template<Degree D>
     using Slot = std::conditional_t<D == static_cast<Degree>(2),
                                     BulkSlot,
                                     EndSlot>;
@@ -375,7 +375,7 @@ struct Chain {
      * @tparam D Vertex degree.
      * @return the Number of vertices.
      */
-    template<Degree D> requires (D <= vertices::maxDegree)
+    template<Degree D> requires (D <= maxDegree)
     constexpr auto num_vertices() const noexcept -> szt;
 
     /**
@@ -1147,7 +1147,7 @@ has_such_neig(const EndId e,
 
 
 template<typename E4>
-template<Degree D> requires (D <= vertices::maxDegree)
+template<Degree D> requires (D <= maxDegree)
 constexpr
 auto Chain<E4>::
 num_vertices() const noexcept -> szt // D = 1, 2, 3, 4

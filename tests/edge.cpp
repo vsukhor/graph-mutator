@@ -9,7 +9,7 @@
 namespace graph_mutator::tests::edge {
 
 
-using Edge = structure::Edge<structure::vertices::maxDegree>;
+using Edge = structure::Edge<maxDegree>;
 using Ends = Edge::Ends;
 
 TEST(EdgeTest, Constructor)

@@ -30,13 +30,10 @@ limitations under the License.
 #include <array>
 
 #include "../../definitions.h"
-#include "../../structure/chain.h"
-#include "../../structure/edge.h"
-#include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
 
 
 namespace graph_mutator::vertex_split {
+
 
 constexpr std::array fullNameStem
    {'v', 'e', 'r', 't', 'e', 'x', '_', 's', 'p', 'l', 'i', 't', '_'};

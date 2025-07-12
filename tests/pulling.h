@@ -23,7 +23,7 @@
 
 namespace graph_mutator::tests::pulling {
 
-using G = structure::Graph<structure::Chain<structure::Edge<structure::vertices::maxDegree>>>;
+using G = structure::Graph<structure::Chain<structure::Edge<maxDegree>>>;
 using Chain = G::Chain;
 using Edge = Chain::Edge;
 using Ends = Chain::Ends;
@@ -39,8 +39,8 @@ constexpr auto eB = Ends::B;
 
 template<Degree D1,
          Degree D2,
-         typename G> requires (structure::vertices::is_implemented_degree<D1> &&
-                               structure::vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct VertexMerger
     : public vertex_merger::Functor<D1, D2, G> {
 

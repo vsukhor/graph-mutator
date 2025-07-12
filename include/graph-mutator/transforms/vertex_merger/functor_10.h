@@ -33,8 +33,8 @@ limitations under the License.
 #include <vector>
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "common.h"
 #include "log.h"
 
@@ -58,9 +58,9 @@ struct Functor<1, 0, G> {
     static constexpr auto J1 = static_cast<Degree>(3);  ///< Degree of the 1st output vertex.
     static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
 
-    static constexpr auto dd = str2<I1, I2>;
-    static constexpr auto shortName = graph_mutator::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = graph_mutator::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str2<I1, I2>;
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
     using Graph = G;
     using Chain = Graph::Chain;

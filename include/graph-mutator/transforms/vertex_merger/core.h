@@ -34,8 +34,8 @@ limitations under the License.
 #include <string>
 
 #include "../../definitions.h"
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../to_string.h"
 #include "log.h"
 
 
@@ -56,7 +56,7 @@ struct Core {
     using EndSlot = Chain::EndSlot;
     using BulkSlot = Chain::BulkSlot;
 
-    static constexpr auto dd = str2<1, 1>;
+    static constexpr auto dd = string_ops::str2<1, 1>;
 
     /**
      * @brief Constructs a Core object from the Graph class instance.

@@ -39,7 +39,8 @@ namespace graph_mutator::structure {
 template<typename G>
 struct IntegralTests {
 
-    using Chain = G::Chain;
+    using Graph = G;  ///< Graph class type.
+    using Chain = Graph::Chain;
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
 
@@ -110,7 +111,7 @@ private:
      /// Mapping of edge indexes to positions within chains.
     const EgIds& gla;
 
-    const G::Components&    ct;  ///< Chain indices segregated into components.
+    const Graph::Components&    ct;  ///< Chain indices segregated into components.
 };
 
 

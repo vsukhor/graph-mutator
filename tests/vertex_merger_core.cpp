@@ -17,7 +17,7 @@ class VertexMergerCoreTest
 
 protected:
 
-    using Gr = structure::Graph<structure::Chain<structure::Edge<structure::vertices::maxDegree>>>;
+    using Gr = structure::Graph<structure::Chain<structure::Edge<maxDegree>>>;
     using Chain = Gr::Chain;
     using Edge = Chain::Edge;
     using Ends = Chain::Ends;  ///< Chain ends.

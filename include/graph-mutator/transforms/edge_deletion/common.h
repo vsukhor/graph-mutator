@@ -31,7 +31,6 @@ limitations under the License.
 
 #include "../../definitions.h"
 #include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
 
 /**
  * @brief Contains utilities for handling edge deletion operations in a graph.
@@ -62,8 +61,8 @@ constexpr std::array fullNameStem
  */
 template<Degree D1,
          Degree D2,
-         typename G> requires (structure::vertices::is_implemented_degree<D1> &&
-                               structure::vertices::is_implemented_degree<D2>)
+         typename G> requires (is_implemented_degree<D1> &&
+                               is_implemented_degree<D2>)
 struct Functor
 {};
 

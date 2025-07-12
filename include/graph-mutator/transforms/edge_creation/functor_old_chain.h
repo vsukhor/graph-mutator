@@ -30,10 +30,8 @@ limitations under the License.
 #include <utility>
 
 #include "../../definitions.h"
-#include "../../structure/chain.h"  // for slot
+#include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../../structure/vertices/degrees.h"
-#include "../../to_string.h"
 
 namespace graph_mutator::edge_creation {
 
@@ -52,7 +50,7 @@ template<Degree D,
 struct FunctorOldChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
-    static_assert (D <= structure::vertices::maxDegree);
+    static_assert (D <= maxDegree);
 
     static constexpr auto isNewChain = false;
 
@@ -61,16 +59,16 @@ struct FunctorOldChain {
     static constexpr auto J1 = static_cast<Degree>(2);  ///< Degree of the 1st output vertex.
     static constexpr auto J2 = D;                       ///< No 2nd output vertex.
 
-    static constexpr auto d {str1<I2>};
-    static constexpr auto shortName {shName<d, 1, 'e', 'c', '_', 'o'>};
+    static constexpr auto d = string_ops::str1<I2>;
+    static constexpr auto shortName = string_ops::shName<d, 1, 'e', 'c', '_', 'o'>;
     static constexpr const char* fullName {"edge_creation_old_chain"};
 
     using Graph = G;
-    using Edge = G::Edge;
     using Chain = Graph::Chain;
+    using Edge = Chain::Edge;
     using BulkSlot = Chain::BulkSlot;
     using EndSlot = Chain::EndSlot;
-    using Ends = Edge::Ends;
+    using Ends = Chain::Ends;
     using ResT = CmpId;
     using Res = std::array<ResT, 1>;
 
