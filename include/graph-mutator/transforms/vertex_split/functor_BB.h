@@ -54,13 +54,13 @@ template<Degree J1_,
          Degree J2_,
          typename G> requires (BulkDegree<J1_> and
                                BulkDegree<J2_>)
-struct Functor<J1_, J2_, G> {
+struct To<J1_, J2_, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
     static constexpr auto J1 = J1_;        ///< Degree of the 1st output vertex.
     static constexpr auto J2 = J2_;        ///< Degree of the 2nd output vertex.
-    static constexpr auto I1 = static_cast<Degree>(4);  ///< Degree of the 1st input vertex.
+    static constexpr auto I1 = Deg4;  ///< Degree of the 1st input vertex.
     static constexpr auto I2 = undefined<Degree>;       ///< No 2nd input vertex.
     static constexpr auto I = I1;                       ///< Input vertex degree.
 
@@ -80,7 +80,7 @@ struct Functor<J1_, J2_, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit To(Graph& gr);
 
     /**
      * @brief Divides the component at a vertex of degree 4.
@@ -99,11 +99,11 @@ struct Functor<J1_, J2_, G> {
 private:
 
     ///< Auxiliary low-level routine producing an intermediate state.
-    vertex_merger::Functor<1, 1, Graph> merge;
+    vertex_merger::From<Deg1, Deg1, Graph> merge;
 
-    Functor<1, 3, Graph> split_to_13;  ///< Auxiliary functor.
-    Functor<1, 2, Graph> split_to_12;  ///< Auxiliary functor.
-    Functor<1, 0, Graph> split_to_10;  ///< Auxiliary functor.
+    To<Deg1, Deg3, Graph> split_to_13;  ///< Auxiliary functor.
+    To<Deg1, Deg2, Graph> split_to_12;  ///< Auxiliary functor.
+    To<Deg1, Deg0, Graph> split_to_10;  ///< Auxiliary functor.
 
     Graph& gr;  ///< Reference to the graph object.
 
@@ -124,8 +124,8 @@ template<Degree J1_,
          Degree J2_,
          typename G> requires (BulkDegree<J1_> and
                                BulkDegree<J2_>)
-Functor<J1_, J2_, G>::
-Functor(Graph& gr)
+To<J1_, J2_, G>::
+To(Graph& gr)
     : merge {gr}
     , split_to_13 {gr}
     , split_to_12 {gr}
@@ -141,7 +141,7 @@ template<Degree J1_,
          Degree J2_,
          typename G> requires (BulkDegree<J1_> and
                                BulkDegree<J2_>)
-auto Functor<J1_, J2_, G>::
+auto To<J1_, J2_, G>::
 operator()(const std::array<EndSlot, 2>& s) -> Res
 {
     return (*this)(s[0], s[1]);
@@ -153,7 +153,7 @@ template<Degree J1_,
          Degree J2_,
          typename G> requires (BulkDegree<J1_> and
                                BulkDegree<J2_>)
-auto Functor<J1_, J2_, G>::
+auto To<J1_, J2_, G>::
 operator()(const EndSlot& _s1,
            const EndSlot& _s2) -> Res
 {
@@ -208,7 +208,7 @@ template<Degree J1_,
          Degree J2_,
          typename G> requires (BulkDegree<J1_> and
                                BulkDegree<J2_>)
-void Functor<J1_, J2_, G>::
+void To<J1_, J2_, G>::
 check_validity(
     const EndSlot& s1,
     const EndSlot& s2
@@ -243,17 +243,17 @@ check_validity(
     ASSERT(ngs2.has(s1),
            shortName, ": s1 ", s1, "not found among connections at s2 ", s2 );
 
-    if constexpr (J1_ == 2 && J2_ == 2)
+    if constexpr (J1_ == Deg2 && J2_ == Deg2)
         ASSERT(!gr.is_same_cycle(s1, s2),
                shortName,  ": disconnecting a cycle chain");
 
-    if constexpr (J1_ == 0 && J2_ == 0)
+    if constexpr (J1_ == Deg0 && J2_ == Deg0)
         ASSERT(cycle_is_selected() && cycle_is_excluded(),
                shortName, ": both selected and excluded ",
                "pairs of slots should belong to a cycle chain");
 
-    if constexpr ((J1_ == 0 && J2_ == 2) ||
-                  (J1_ == 2 && J2_ == 0))
+    if constexpr ((J1_ == Deg0 && J2_ == Deg2) ||
+                  (J1_ == Deg2 && J2_ == Deg0))
         ASSERT(( cycle_is_selected() && !cycle_is_excluded()) ||
                (!cycle_is_selected() &&  cycle_is_excluded()),
                shortName,  ": only either selected ",

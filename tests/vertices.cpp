@@ -31,10 +31,10 @@ template<unsigned D1,
          unsigned D2,
          typename G>
 struct VertexMerger
-    : public graph_mutator::vertex_merger::Functor<D1, D2, G> {
+    : public graph_mutator::vertex_merger::From<D1, D2, G> {
 
     explicit VertexMerger(G& graph)
-        : graph_mutator::vertex_merger::Functor<D1, D2, G> {graph}
+        : graph_mutator::vertex_merger::From<D1, D2, G> {graph}
     {}
 };
 

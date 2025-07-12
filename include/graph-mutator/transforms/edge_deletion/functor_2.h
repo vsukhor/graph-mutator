@@ -30,7 +30,6 @@ limitations under the License.
 #include "../../definitions.h"
 #include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "common.h"
 
 
 /**
@@ -42,14 +41,16 @@ namespace graph_mutator::edge_deletion {
 
 
 /**
- * @brief Deletion of graph edges without deleting their host chain.
- * Handles the case of multi-edge chains.
- * @tparam D Vertex degree at the connected end.
+ * @brief Functor template for deletion of graph edges without deleting their host chain.
+ * @details Handles the case of multi-edge chains. Notably, because the chain
+ * contains more than a single edge, at least one of the edge ends is a vertex
+ * of degree 2.
+ * @tparam D Vertex degree at one of the edge ends.
  * @tparam Graph hosting the edge to be deleted.
  */
 template<Degree D,
          typename G>
-struct Functor<2, D, G> {
+struct PreservingHostChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
     static_assert(is_implemented_degree<D>);
@@ -61,25 +62,39 @@ struct Functor<2, D, G> {
     using ResT = CmpId;
     using Res = std::array<ResT, 1>;
 
-    static constexpr auto withChain = false;
-
     // This is a multi-edge chain, so one of the edge ends has degree 2.
-    static constexpr auto I1 = static_cast<Degree>(2);
+    static constexpr auto I1 = Deg2;
     /// This is a multi-edge chain, so one of the edge ends has arbitrary degree.
     static constexpr auto I2 = D;
 
     static constexpr auto J1 = undefined<Degree>;
     static constexpr auto J2 = undefined<Degree>;
 
-    static constexpr auto dd = string_ops::str2<I1, I2>;
-    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
-    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
+    static constexpr auto dd = string_ops::str1<I2>;
+    /**
+     * @brief Short name stem for edge deletion functors.
+     * Used for naming conventions in the code.
+     */
+    static constexpr std::array shortNameStem {'e', 'd', 'p', 'h', '_'};
+
+    /**
+     * @brief Full name stem for edge deletion functors.
+     * Used for more descriptive naming conventions in the code.
+     */
+    static constexpr std::array fullNameStem {
+        'e', 'd', 'g', 'e', '_', 'd', 'e', 'l', 'e', 't', 'i', 'o', 'n', '_',
+        'w', 'i', 't', 'h', 'o', 'u', 't', '_', 'h', 'o', 's', 't', '_',
+        'c', 'h', 'a', 'i', 'n', '_'
+    };
+
+    static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 1>;
+    static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 1>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    constexpr explicit PreservingHostChain(Graph& gr);
 
     /**
      * @brief Function call operator executing the deletion using edge index.
@@ -103,15 +118,16 @@ protected:
 
 template<Degree D,
          typename G>
-Functor<2, D, G>::
-Functor(Graph& gr)
+constexpr
+PreservingHostChain<D, G>::
+PreservingHostChain(Graph& gr)
     : gr {gr}
 {}
 
 
 template<Degree D,
          typename G>
-auto Functor<2, D, G>::
+auto PreservingHostChain<D, G>::
 operator()(const BulkSlot& s) noexcept -> Res
 {
     const auto [w, a] = s.we();
@@ -172,7 +188,7 @@ operator()(const BulkSlot& s) noexcept -> Res
 
 template<Degree D,
          typename G>
-auto Functor<2, D, G>::
+auto PreservingHostChain<D, G>::
 operator()(const EgId ind) noexcept -> Res
 {
     return (*this)(gr.ind2bslot(ind));

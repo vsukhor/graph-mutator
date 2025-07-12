@@ -54,7 +54,7 @@ struct Log {
     const std::string longName {"Vertex split "};
     const std::string shortName {"vs"};
 
-    explicit Log(
+    constexpr explicit Log(
         const std::string& degs,
         Graph& gr
     );
@@ -100,6 +100,7 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
+constexpr
 Log<G>::
 Log(
     const std::string& degs,

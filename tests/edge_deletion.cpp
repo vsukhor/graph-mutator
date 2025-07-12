@@ -29,10 +29,10 @@ template<Degree D1,
          typename G> requires (is_implemented_degree<D1> &&
                                is_implemented_degree<D2>)
 struct VertexMerger
-    : public graph_mutator::vertex_merger::Functor<D1, D2, G> {
+    : public vertex_merger::From<D1, D2, G> {
 
     explicit VertexMerger(G& graph)
-        : graph_mutator::vertex_merger::Functor<D1, D2, G> {graph}
+        : vertex_merger::From<D1, D2, G> {graph}
     {}
 };
 
@@ -43,10 +43,14 @@ template<Degree D1,
          typename G> requires (is_implemented_degree<D1> &&
                                is_implemented_degree<D2>)
 struct EdgeDeletion
-    : public graph_mutator::edge_deletion::Functor<D1, D2, G> {
+    : public std::conditional_t<D1 == 1,
+                graph_mutator::edge_deletion::DeletingHostChain<D2, G>,
+                graph_mutator::edge_deletion::PreservingHostChain<D2, G>> {
 
     explicit EdgeDeletion(G& graph)
-        : graph_mutator::edge_deletion::Functor<D1, D2, G> {graph}
+        : std::conditional_t<D1 == 1,
+            graph_mutator::edge_deletion::DeletingHostChain<D2, G>,
+            graph_mutator::edge_deletion::PreservingHostChain<D2, G>> {graph}
     {}
 };
 

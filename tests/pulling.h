@@ -42,10 +42,10 @@ template<Degree D1,
          typename G> requires (is_implemented_degree<D1> &&
                                is_implemented_degree<D2>)
 struct VertexMerger
-    : public vertex_merger::Functor<D1, D2, G> {
+    : public vertex_merger::From<D1, D2, G> {
 
     explicit VertexMerger(G& graph)
-        : vertex_merger::Functor<D1, D2, G> {graph}
+        : vertex_merger::From<D1, D2, G> {graph}
     {}
 };
 

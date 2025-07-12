@@ -49,12 +49,12 @@ namespace graph_mutator::vertex_merger {
  * @tparam G Graph class on which operator() acts.
  */
 template<typename G>
-struct Functor<1, 1, G> {
+struct From<Deg1, Deg1, G> {
 
     static_assert(std::is_base_of_v<structure::GraphBase, G>);
 
-    static constexpr auto I1 = static_cast<Degree>(1);  ///< Degree of the 1st input vertex.
-    static constexpr auto I2 = static_cast<Degree>(1);  ///< Degree of the 2nd input vertex.
+    static constexpr auto I1 = Deg1;  ///< Degree of the 1st input vertex.
+    static constexpr auto I2 = Deg1;  ///< Degree of the 2nd input vertex.
     static constexpr auto J1 = I1 + I2;                 ///< Degree of the 1st output vertex.
     static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
 
@@ -74,7 +74,7 @@ struct Functor<1, 1, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit From(Graph& gr);
 
     /**
      * Merges two vertices of degree 1 to produce a vertex of degree 2.
@@ -104,8 +104,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-Functor<1, 1, G>::
-Functor(Graph& gr)
+From<Deg1, Deg1, G>::
+From(Graph& gr)
     : gr {gr}
     , merge {gr, shortName}
     , log {dd, gr}
@@ -114,7 +114,7 @@ Functor(Graph& gr)
 // Important: when merge.antiparallel is called:
 // if \p e1 is A, reverses g of w1, if \p e1 is B, reverses g of w2
 template<typename G>
-auto Functor<1, 1, G>::
+auto From<Deg1, Deg1, G>::
 operator()(
     const EndSlot& s1,
     const EndSlot& s2

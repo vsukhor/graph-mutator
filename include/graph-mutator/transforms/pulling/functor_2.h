@@ -18,13 +18,13 @@ namespace graph_mutator::pulling {
 
 template<Orientation Dir,
          typename G>
-struct Functor<2, Dir, G>
+struct Functor<Deg2, Dir, G>
     : public FunctorBase<G> {
 
     static constexpr auto Direction = Dir;
 
     /// Degree of the pulled vertex.
-    static constexpr auto D = static_cast<Degree>(2);
+    static constexpr auto D = Deg2;
     static_assert(is_pullable_degree<D>);
 
     static constexpr auto d = string_ops::str1<D>;
@@ -102,9 +102,9 @@ protected:
 private:
 
     // Auxiliary functors for vertex transformations
-    vertex_split::Functor<1, 1, Graph>  vertex_split_11;  // degree 2 -> 1 + 1
-    vertex_merger::Functor<1, 1, Graph> vertex_merge_11;  // degree 1 + 1 -> 2
-    vertex_merger::Functor<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
+    vertex_split::To<1, 1, Graph>  vertex_split_11;  // degree 2 -> 1 + 1
+    vertex_merger::From<1, 1, Graph> vertex_merge_11;  // degree 1 + 1 -> 2
+    vertex_merger::From<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
 
     L log;
 
@@ -116,7 +116,7 @@ private:
 
 template<Orientation Dir,
          typename G>
-Functor<2, Dir, G>::
+Functor<Deg2, Dir, G>::
 Functor(Graph& gr)
     : Base {gr}
     , vertex_split_11 {gr}
@@ -128,7 +128,7 @@ Functor(Graph& gr)
 
 template<Orientation Dir,
          typename G>
-auto Functor<2, Dir, G>::
+auto Functor<Deg2, Dir, G>::
 operator()(
     Ps& pp,
     const int n
@@ -157,7 +157,7 @@ operator()(
 
 template<Orientation Dir,
          typename G>
-void Functor<2, Dir, G>::
+void Functor<Deg2, Dir, G>::
 pull_N(Ps& pp)
 {
     const auto& p = pp.pth;       // path over graph-wide edge indexes (ind)
@@ -236,7 +236,7 @@ pull_N(Ps& pp)
 
 template<Orientation Dir,
          typename G>
-void Functor<2, Dir, G>::
+void Functor<Deg2, Dir, G>::
 pull_1(Ps& pp)
 {
     ASSERT(pp.length() == 1, "Path is longer than 1 edge.");
@@ -258,7 +258,7 @@ pull_1(Ps& pp)
 
 template<Orientation Dir,
          typename G>
-void Functor<2, Dir, G>::
+void Functor<Deg2, Dir, G>::
 correct_driver(Ps& pp) const noexcept
 {
     ASSERT(pp.length() > 1,
@@ -297,7 +297,7 @@ correct_driver(Ps& pp) const noexcept
 
 template<Orientation Dir,
          typename G>
-void Functor<2, Dir, G>::
+void Functor<Deg2, Dir, G>::
 check_path(
     const Ps& pp,
     const int n

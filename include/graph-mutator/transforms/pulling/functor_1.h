@@ -15,13 +15,13 @@ namespace graph_mutator::pulling {
 
 template<Orientation Dir,
          typename G>
-struct Functor<1, Dir, G>
+struct Functor<Deg1, Dir, G>
     : public FunctorBase<G> {
 
     static constexpr auto Direction = Dir;
 
     /// Degree of the pulled vertex.
-    static constexpr auto D = static_cast<Degree>(1);
+    static constexpr auto D = Deg1;
     static_assert(is_pullable_degree<D>);
 
     static constexpr auto d = string_ops::str1<D>;
@@ -77,7 +77,7 @@ private:
 
 template<Orientation Dir,
          typename G>
-Functor<1, Dir, G>::
+Functor<Deg1, Dir, G>::
 Functor(Graph& gr)
     : Base {gr}
     , log {*this}
@@ -86,7 +86,7 @@ Functor(Graph& gr)
 
 template<Orientation Dir,
          typename G>
-auto Functor<1, Dir, G>::
+auto Functor<Deg1, Dir, G>::
 operator()(
     Paths<Cmpt>& pp,
     int n
@@ -108,7 +108,7 @@ operator()(
 
 template<Orientation Dir,
          typename G>
-void Functor<1, Dir, G>::
+void Functor<Deg1, Dir, G>::
 check_path(
     const Paths<Cmpt>& pp,
     const int n

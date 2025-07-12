@@ -54,13 +54,14 @@ struct InExistingChain {
 
     static constexpr auto isNewChain = false;
 
-    static constexpr auto I1 = undefined<Degree>;       ///< Degree of the 1st input vertex.
-    static constexpr auto I2 = D;                       ///< Degree of the 2nd input vertex.
-    static constexpr auto J1 = static_cast<Degree>(2);  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = D;                       ///< No 2nd output vertex.
+    static constexpr auto I1 = undefined<Degree>;  ///< Degree of the 1st input vertex.
+    static constexpr auto I2 = D;     ///< Degree of the 2nd input vertex.
+    static constexpr auto J1 = Deg2;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = D;     ///< No 2nd output vertex.
 
     static constexpr auto d = string_ops::str1<I2>;
-    static constexpr auto shortName = string_ops::shName<d, 1, 'e', 'c', '_', 'o'>;
+    static constexpr auto shortName =
+        string_ops::shName<d, 1, 'e', 'c', '_', 'o'>;
     static constexpr const char* fullName {"edge_creation_old_chain"};
 
     using Graph = G;

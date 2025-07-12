@@ -20,13 +20,13 @@ namespace graph_mutator::pulling {
 
 template<Orientation Dir,
          typename G>
-struct Functor<3, Dir, G>
+struct Functor<Deg3, Dir, G>
     : public FunctorBase<G> {
 
     static constexpr auto Direction = Dir;
 
     /// Degree of the pulled vertex.
-    static constexpr auto D = static_cast<Degree>(3);
+    static constexpr auto D = Deg3;
     static_assert(is_pullable_degree<D>);
 
     static constexpr auto d = string_ops::str1<D>;
@@ -64,8 +64,10 @@ struct Functor<3, Dir, G>
 
 protected:
 
-    void check_path(const Ps& pp,
-                    const int n) const noexcept;
+    void check_path(
+        const Ps& pp,
+        const int n
+    ) const noexcept;
 
 private:
 
@@ -75,12 +77,12 @@ private:
     using Base::glm;
 
     // Auxiliary functors for vertex transformations
-    vertex_split::Functor<1, 2, Graph>  vertex_split_12;  // degree 3 -> 1 + 2
-    vertex_split::Functor<1, 0, Graph>  vertex_split_10;  // degree 3 -> 1 + 0
-    vertex_merger::Functor<1, 0, Graph> vertex_merge_10;  // degree 1 + 0 -> 2
-    vertex_merger::Functor<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
-    vertex_merger::Functor<2, 0, Graph> vertex_merge_20;  // degree 2 + 0 -> 4
-    vertex_merger::Functor<2, 2, Graph> vertex_merge_22;  // degree 2 + 2 -> 4
+    vertex_split::To<1, 2, Graph>  vertex_split_12;  // degree 3 -> 1 + 2
+    vertex_split::To<1, 0, Graph>  vertex_split_10;  // degree 3 -> 1 + 0
+    vertex_merger::From<1, 0, Graph> vertex_merge_10;  // degree 1 + 0 -> 2
+    vertex_merger::From<1, 2, Graph> vertex_merge_12;  // degree 1 + 2 -> 3
+    vertex_merger::From<2, 0, Graph> vertex_merge_20;  // degree 2 + 0 -> 4
+    vertex_merger::From<2, 2, Graph> vertex_merge_22;  // degree 2 + 2 -> 4
 
     L log;
 
@@ -92,7 +94,7 @@ private:
 
 template<Orientation Dir,
          typename G>
-Functor<3, Dir, G>::
+Functor<Deg3, Dir, G>::
 Functor(Graph& gr)
     : Base {gr}
     , vertex_split_12 {gr}
@@ -107,7 +109,7 @@ Functor(Graph& gr)
 
 template<Orientation Dir,
          typename G>
-auto Functor<3, Dir, G>::
+auto Functor<Deg3, Dir, G>::
 operator()(
     Ps& pp,
     const int n
@@ -132,7 +134,7 @@ operator()(
 /// Pulls at a connected chain end (converting a 3-node into 4-node)
 template<Orientation Dir,
          typename G>
-void Functor<3, Dir, G>::
+void Functor<Deg3, Dir, G>::
 pull(Ps& pp)
 {
     const auto iD = pp.d.ind;
@@ -233,7 +235,7 @@ pull(Ps& pp)
 
 template<Orientation Dir,
          typename G>
-void Functor<3, Dir, G>::
+void Functor<Deg3, Dir, G>::
 check_path(
     const Ps& pp,
     const int n

@@ -48,7 +48,7 @@ constexpr std::array shortNameStem {'v', '_', 'm', '_'};
 template<Degree I1,
          Degree I2,
          typename G>
-struct Functor {};
+struct From {};
 
 
 }  // namespace graph_mutator::vertex_merger

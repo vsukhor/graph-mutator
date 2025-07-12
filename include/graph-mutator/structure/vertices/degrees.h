@@ -23,6 +23,12 @@ constexpr std::array<Degree, maxDegree + 1> degrees {0, 1, 2, 3, 4};
 template <Degree D>
 constexpr auto is_implemented_degree = D <= maxDegree && D >= 0;
 
+constexpr auto Deg0 = static_cast<Degree>(0);
+constexpr auto Deg1 = static_cast<Degree>(1);
+constexpr auto Deg2 = static_cast<Degree>(2);
+constexpr auto Deg3 = static_cast<Degree>(3);
+constexpr auto Deg4 = static_cast<Degree>(4);
+
 constexpr std::array<Degree, 2> bulkDegrees {0, 2};
 template <Degree D>
 constexpr auto is_bulk_degree =

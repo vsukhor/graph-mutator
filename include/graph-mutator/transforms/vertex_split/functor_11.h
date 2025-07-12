@@ -51,13 +51,13 @@ namespace graph_mutator::vertex_split {
  * @tparam G Graph class on which it operates.
  */
 template<typename G>
-struct Functor<1, 1, G> {
+struct To<Deg1, Deg1, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
-    static constexpr auto J1 = static_cast<Degree>(1);  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = static_cast<Degree>(1);  ///< Degree of the 2nd output vertex.
-    static constexpr auto I1 = J1 + J2;            ///< Degree of the input vertex.
+    static constexpr auto J1 = Deg1;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = Deg1;  ///< Degree of the 2nd output vertex.
+    static constexpr auto I1 = J1 + J2;  ///< Degree of the input vertex.
     static constexpr auto I2 = undefined<Degree>;  ///< No 2nd input vertex.
     static constexpr auto I = I1;                  ///< Input vertex degree.
 
@@ -77,7 +77,7 @@ struct Functor<1, 1, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit To(Graph& gr);
 
     /**
      * @brief Divides the graph chain at a vertex of degree 2.
@@ -126,8 +126,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-Functor<1, 1, G>::
-Functor(Graph& gr)
+To<Deg1, Deg1, G>::
+To(Graph& gr)
     : merge {gr, "vm_core called from"s + shortName}
     , gr {gr}
     , cn {gr.cn}
@@ -136,7 +136,7 @@ Functor(Graph& gr)
 
 
 template<typename G>
-auto Functor<1, 1, G>::
+auto To<Deg1, Deg1, G>::
 operator()(const BulkSlot& s) -> Res
 {
     const auto [w, a] = s.we();
@@ -150,7 +150,7 @@ operator()(const BulkSlot& s) -> Res
 
 
 template<typename G>
-auto Functor<1, 1, G>::
+auto To<1, 1, G>::
 disconnected_cycle_d0(const ChId w) -> Res
 {
     auto& m = cn[w];
@@ -195,7 +195,7 @@ disconnected_cycle_d0(const ChId w) -> Res
 // 'a' is the vertex position inside the chain 'w'
 // 'a' is counted from 1 and is the last edge to remain in the original chain
 template<typename G>
-auto Functor<1, 1, G>::
+auto To<Deg1, Deg1, G>::
 disconnected_cycle_d2(const BulkSlot& s) -> Res
 {
     const auto [w, a] = s.we();
@@ -260,7 +260,7 @@ disconnected_cycle_d2(const BulkSlot& s) -> Res
 // 'a' is the vertex position inside the chain 'w'
 // 'a' is counted from 1 and is the last edge to remain in the original chain
 template<typename G>
-auto Functor<1, 1, G>::
+auto To<Deg1, Deg1, G>::
 linear(const BulkSlot& s) -> Res
 {
     const auto [w, a] = s.we();

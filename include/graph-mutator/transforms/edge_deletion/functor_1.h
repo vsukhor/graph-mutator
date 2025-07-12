@@ -33,7 +33,6 @@ limitations under the License.
 #include "../component_deletion/functor.h"
 #include "../vertex_split/functor_1B.h"
 #include "../vertex_split/functor_13.h"
-#include "common.h"
 
 
 /**
@@ -44,14 +43,17 @@ limitations under the License.
 namespace graph_mutator::edge_deletion {
 
 /**
- * @brief Deletion of graph edges along with their host chain.
- * Handles the case of single-edge chains having single unconnected end.
+ * @brief Functor template for deletion of graph edges along with their host chain.
+ * @details This template is specialized for different vertex degrees.
+ * Handles the case of single-edge chains. Importantly, a single-edge chain is
+ * suitable for deletion upon the edge removal only if one of its ends is
+ * unconnected, while the other end is at a junction.
  * @tparam D Vertex degree at the connected end.
  * @tparam Graph hosting the edge to be deleted.
  */
 template<Degree D,
          typename G>
-struct Functor<1, D, G> {
+struct DeletingHostChain {
 
     static_assert(is_junction_degree<D>);
 
@@ -64,19 +66,32 @@ struct Functor<1, D, G> {
     using ResT = CmpId;
     using Res = std::array<ResT, 1>;
 
-    static constexpr auto withChain = true;
-
     /// This is a single-edge chain, so one of the edge ends has degree 1.
-    static constexpr auto I1 = static_cast<Degree>(1);
+    static constexpr auto I1 = Deg1;
 
     /// This is a single-edge connected chain, so one of the edge ends is a (3-way or 4-way) junction.
     static constexpr auto I2 = D;
 
-    static constexpr auto J1 = D == 3 ? static_cast<Degree>(0)
-                                      : undefined<Degree>;
+    static constexpr auto J1 = D == Deg3 ? Deg0 : undefined<Degree>;
     static constexpr auto J2 = I2 - 1;
 
-    static constexpr auto dd = string_ops::str2<I1, I2>;
+    static constexpr auto dd = string_ops::str1<I2>;
+    /**
+     * @brief Short name stem for edge deletion functors.
+     * Used for naming conventions in the code.
+     */
+    static constexpr std::array shortNameStem {'e', 'd', 'r', 'h', '_'};
+
+    /**
+     * @brief Full name stem for edge deletion functors.
+     * Used for more descriptive naming conventions in the code.
+     */
+    static constexpr std::array fullNameStem{
+        'e', 'd', 'g', 'e', '_', 'd', 'e', 'l', 'e', 't', 'i', 'o', 'n', '_',
+        'w', 'i', 't', 'h', '_', 'h', 'o', 's', 't', '_',
+        'c', 'h', 'a', 'i', 'n', '_'
+    };
+
     static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
     static constexpr auto fullName  = string_ops::concat<fullNameStem, dd, 2>;
 
@@ -84,7 +99,7 @@ struct Functor<1, D, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    constexpr explicit DeletingHostChain(Graph& gr);
 
     /**
      * @brief Function call operator executing the deletion using edge index.
@@ -103,10 +118,11 @@ protected:
     Graph& gr;  ///< Reference to the graph object.
 
     // Auxiliary functors.
-    component_deletion::Functor<Graph> clrem;          ///< Component deletion.
 
-    vertex_split::Functor<1, D-1, Graph> split_D;  ///< Vertex split (1, D-1).
-    vertex_split::Functor<1, 0, Graph> split_0;    ///< Vertex split (1, 0).
+    component_deletion::Functor<Graph> clrem;  ///< Component deletion.
+
+    vertex_split::To<Deg1, D-1, Graph>  split_D;  ///< Vertex split (1, D-1).
+    vertex_split::To<Deg1, Deg0, Graph> split_0;  ///< Vertex split (1, 0).
 };
 
 
@@ -114,8 +130,9 @@ protected:
 
 template<Degree D,
          typename G>
-Functor<1, D, G>::
-Functor(Graph& gr)
+constexpr
+DeletingHostChain<D, G>::
+DeletingHostChain(Graph& gr)
     : gr {gr}
     , clrem {gr}
     , split_D {gr}
@@ -125,7 +142,7 @@ Functor(Graph& gr)
 
 template<Degree D,
          typename G>
-auto Functor<1, D, G>::
+auto DeletingHostChain<D, G>::
 operator()(const EndSlot& s) noexcept -> Res
 {
     const auto [w, e] = s.we();
@@ -162,7 +179,7 @@ operator()(const EndSlot& s) noexcept -> Res
     // edge removal would amount to chain removal and induce topology
     // change by vertex merger on the chain ends.
 
-    const auto cc = D == 3 && gr.cn[ngs[0].w].is_connected_cycle()
+    const auto cc = D == Deg3 && gr.cn[ngs[0].w].is_connected_cycle()
                   ? split_0(s)
                   : split_D(s);
 
@@ -182,7 +199,7 @@ operator()(const EndSlot& s) noexcept -> Res
 
 template<Degree D,
          typename G>
-auto Functor<1, D, G>::
+auto DeletingHostChain<D, G>::
 operator()(const EgId ind) noexcept -> Res
 {
     return (*this)(gr.ind2bslot(ind));

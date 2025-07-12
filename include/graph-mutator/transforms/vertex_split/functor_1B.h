@@ -50,15 +50,15 @@ namespace graph_mutator::vertex_split {
  */
 template<Degree J2_,
          typename G> requires BulkDegree<J2_>
-struct Functor<1, J2_, G> {
+struct To<Deg1, J2_, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
-    static constexpr auto J1 = static_cast<Degree>(1);  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = J2_;                     ///< Degree of the 2nd output vertex.
-    static constexpr auto I1 = static_cast<Degree>(3);  ///< Degree of the input vertex.
-    static constexpr auto I2 = undefined<Degree>;       ///< No 2nd input vertex.
-    static constexpr auto I = I1;                       ///< Input vertex degree.
+    static constexpr auto J1 = Deg1;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = J2_;   ///< Degree of the 2nd output vertex.
+    static constexpr auto I1 = Deg3;  ///< Degree of the input vertex.
+    static constexpr auto I2 = undefined<Degree>;  ///< No 2nd input vertex.
+    static constexpr auto I = I1;                  ///< Input vertex degree.
 
     static constexpr auto dd = string_ops::str2<J1, J2>;
     static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
@@ -75,7 +75,7 @@ struct Functor<1, J2_, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit To(Graph& gr);
 
     /**
      * @brief Divides the graph at a vertex of degree 3.
@@ -101,9 +101,9 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<Degree J2_,
-         typename G>  requires BulkDegree<J2_>
-Functor<1, J2_, G>::
-Functor(Graph& gr)
+         typename G> requires BulkDegree<J2_>
+To<Deg1, J2_, G>::
+To(Graph& gr)
     : merge {gr, "vm_core called from"s + shortName}
     , gr {gr}
     , cn {gr.cn}
@@ -112,8 +112,8 @@ Functor(Graph& gr)
 
 
 template<Degree J2_,
-         typename G>  requires BulkDegree<J2_>
-auto Functor<1, J2_, G>::
+         typename G> requires BulkDegree<J2_>
+auto To<Deg1, J2_, G>::
 operator()(const EndSlot& s) -> Res
 {
     if constexpr (verboseF)

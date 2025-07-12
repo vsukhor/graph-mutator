@@ -86,13 +86,13 @@ private:
     // Auxiliary functors
 
     // Creation of an edge at a free end of an existing chain.
-    edge_creation::InExistingChain<1, Graph> create_edge;
+    edge_creation::InExistingChain<Deg1, Graph> create_edge;
 
     // Deletion of a single-edge chain having one end free:
     // for chains having the other end connected via a vertex of degree 3
-    edge_deletion::Functor<1, 3, Graph> delete_edge_3;
+    edge_deletion::DeletingHostChain<Deg3, Graph> delete_edge_3;
     // for chains having the other end connected via a vertex of degree 4
-    edge_deletion::Functor<1, 4, Graph> delete_edge_4;
+    edge_deletion::DeletingHostChain<Deg4, Graph> delete_edge_4;
 
     void dissolve_single_edge_chain(Ps& pp);
 

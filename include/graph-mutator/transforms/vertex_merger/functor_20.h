@@ -48,14 +48,14 @@ namespace graph_mutator::vertex_merger {
  * @tparam G Graph class on which operator() acts.
  */
 template<typename G>
-struct Functor<2, 0, G> {
+struct From<Deg2, Deg0, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
-    static constexpr auto I1 = static_cast<Degree>(2);  ///< Degree of the 1st input vertex.
-    static constexpr auto I2 = static_cast<Degree>(0);  ///< Degree of the 2nd input vertex.
-    static constexpr auto J1 = static_cast<Degree>(4);  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
+    static constexpr auto I1 = Deg2;  ///< Degree of the 1st input vertex.
+    static constexpr auto I2 = Deg0;  ///< Degree of the 2nd input vertex.
+    static constexpr auto J1 = Deg4;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = undefined<Degree>;  ///< No 2nd output vertex.
 
     static constexpr auto dd = string_ops::str2<I1, I2>;
     static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
@@ -74,7 +74,7 @@ struct Functor<2, 0, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit From(Graph& gr);
 
     /**
      * Merges a chain bulk vertex to a boundary vertex belonging to cycle chain.
@@ -94,7 +94,7 @@ private:
     Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
     ///< Auxiliary functor producing a splitted intermediary.
-    vertex_split::Functor<1, 1, Graph> split_to11;
+    vertex_split::To<1, 1, Graph> split_to11;
 
     Log<Graph> log;
 };
@@ -103,8 +103,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-Functor<2, 0, G>::
-Functor(Graph& gr)
+From<Deg2, Deg0, G>::
+From(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , split_to11 {gr}
@@ -113,7 +113,7 @@ Functor(Graph& gr)
 
 
 template<typename G>
-auto Functor<2, 0, G>::
+auto From<Deg2, Deg0, G>::
 operator()(
     const BulkSlot& b1,
     const ChId w2

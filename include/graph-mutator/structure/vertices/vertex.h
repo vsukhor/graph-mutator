@@ -59,10 +59,13 @@ template<Degree D_,
          typename S>
 struct Vertex {
 
-    static constexpr auto D = D_;  ///< Vertex degree.
-    static constexpr auto numEdges = D == static_cast<Degree>(0)
-                                   ? static_cast<Degree>(2)
-                                   : D;
+    /// Vertex degree.
+    static constexpr auto D = D_;
+
+    /// Number of edges incident to the vertex.
+    static constexpr unsigned int numEdges {D == Deg0 ? 2 : D};
+
+    /// Type of the slot incident to the vertex.
     static constexpr auto isBulk = is_bulk_degree<D>;
 
     static_assert(is_implemented_degree<D>);

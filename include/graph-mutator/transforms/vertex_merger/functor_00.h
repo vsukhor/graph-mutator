@@ -48,13 +48,13 @@ namespace graph_mutator::vertex_merger {
  * @tparam G Graph class on which operator() acts.
  */
 template<typename G>
-struct Functor<0, 0, G> {
+struct From<Deg0, Deg0, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
-    static constexpr auto I1 = static_cast<Degree>(0);  ///< Degree of the 1st input vertex.
-    static constexpr auto I2 = static_cast<Degree>(0);  ///< Degree of the 2nd input vertex.
-    static constexpr auto J1 = static_cast<Degree>(4);  ///< Degree of the 1st output vertex.
+    static constexpr auto I1 = Deg0;  ///< Degree of the 1st input vertex.
+    static constexpr auto I2 = Deg0;  ///< Degree of the 2nd input vertex.
+    static constexpr auto J1 = Deg4;  ///< Degree of the 1st output vertex.
     static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
 
     static constexpr auto dd = string_ops::str2<I1, I2>;
@@ -74,7 +74,7 @@ struct Functor<0, 0, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit From(Graph& gr);
 
     /**
      * Merges two disconnected cycles on their boundaty vertices.
@@ -91,7 +91,7 @@ private:
     Graph::Chains& cn;  ///< Reference to the graph edge chains.
 
     ///< Auxiliary functor producing a splitted intermediary.
-    vertex_split::Functor<1, 1, Graph> split_to_11;
+    vertex_split::To<Deg1, Deg1, Graph> split_to_11;
 
     Log<Graph> log;
 };
@@ -100,8 +100,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-Functor<0, 0, G>::
-Functor(Graph& gr)
+From<Deg0, Deg0, G>::
+From(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , split_to_11 {gr}
@@ -110,7 +110,7 @@ Functor(Graph& gr)
 
 
 template<typename G>
-auto Functor<0, 0, G>::
+auto From<Deg0, Deg0, G>::
 operator()(
     const ChId w1,
     const ChId w2

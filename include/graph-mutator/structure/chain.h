@@ -75,7 +75,7 @@ struct Chain {
     using thisT = Chain<Edge>;
 
     template<Degree D>
-    using Slot = std::conditional_t<D == static_cast<Degree>(2),
+    using Slot = std::conditional_t<D == Deg2,
                                     BulkSlot,
                                     EndSlot>;
 
@@ -1152,21 +1152,21 @@ constexpr
 auto Chain<E4>::
 num_vertices() const noexcept -> szt // D = 1, 2, 3, 4
 {
-    if constexpr (D == 0)      // count boundaries of disconnected cycles
+    if constexpr (D == Deg0)  // count boundaries of disconnected cycles
         return is_disconnected_cycle() ? 1 : 0;
 
-    if constexpr (D == 1) {    // count vertices of degree 1
+    if constexpr (D == Deg1) {  // count vertices of degree 1
         if ( is_connected_at(endA) &&  is_connected_at(endB)) return 0;
         if (!is_connected_at(endA) && !is_connected_at(endB)) return 2;
         /* else */                                            return 1;
     }
 
-    if constexpr (D == 2)      // count vertices of degree 2
+    if constexpr (D == Deg2)  // count vertices of degree 2
         return length() - 1;
 
     // count vertices of degree 3 or 4
 
-    constexpr auto N = D - 1U;
+    constexpr szt N {D - 1U};
     const auto nA = ngs[endA].num();
     const auto nB = ngs[endB].num();
 

@@ -47,13 +47,13 @@ namespace graph_mutator::vertex_split {
  * @tparam G Graph class on which it operates.
  */
 template<typename G>
-struct Functor<1, 3, G> {
+struct To<Deg1, Deg3, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
 
-    static constexpr auto J1 = static_cast<Degree>(1);  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = static_cast<Degree>(3);  ///< Degree of the 2nd output vertex.
-    static constexpr auto I1 = J1 + J2;            ///< Degree of the input vertex.
+    static constexpr auto J1 = Deg1;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = Deg3;  ///< Degree of the 2nd output vertex.
+    static constexpr auto I1 = J1 + J2;  ///< Degree of the input vertex.
     static constexpr auto I2 = undefined<Degree>;  ///< No 2nd input vertex.
     static constexpr auto I = I1;                  ///< Input vertex degree.
 
@@ -73,7 +73,7 @@ struct Functor<1, 3, G> {
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit To(Graph& gr);
 
     /**
      * @brief Divides the chain at a vertex of degree 4 to 1+3.
@@ -95,8 +95,8 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
-Functor<1, 3, G>::
-Functor(Graph& gr)
+To<Deg1, Deg3, G>::
+To(Graph& gr)
     : gr {gr}
     , cn {gr.cn}
     , log {dd, gr}
@@ -105,7 +105,7 @@ Functor(Graph& gr)
 
 // cuts a 4-junction
 template<typename G>
-auto Functor<1, 3, G>::
+auto To<Deg1, Deg3, G>::
 operator()(const EndSlot& s) -> Res
 {
     const auto [w, end] = s.we();

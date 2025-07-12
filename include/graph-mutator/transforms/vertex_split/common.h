@@ -41,7 +41,10 @@ constexpr std::array fullNameStem
 constexpr std::array shortNameStem {'v', '_', 's', '_'};
 
 /**
- * @brief Template definition for vertex degree-specific specializations.
+ * @brief Template specialization for vertex split functor.
+ * @details This class template is specialized for specific vertex degrees
+ * and provides the functionality to split a vertex into two vertices of
+ * specified degrees.
  * @tparam D1 Degree of the 1st resulting vertex.
  * @tparam D2 Degree of the 2nd resulting vertex.
  * @tparam G Graph type on which the split operation is performed.
@@ -49,11 +52,8 @@ constexpr std::array shortNameStem {'v', '_', 's', '_'};
 template<Degree D1,
          Degree D2,
          typename G>
-class Functor
+class To
 {};
-
-
-
 
 }  // namespace graph_mutator::vertex_split
 

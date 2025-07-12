@@ -54,16 +54,14 @@ template<Degree D,
 struct InNewChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
-    static_assert (is_bulk_degree<D> || D == 3);
+    static_assert (is_bulk_degree<D> || D == Deg3);
 
     static constexpr auto isNewChain = true;
 
     static constexpr auto I1 = undefined<Degree>;
     static constexpr auto I2 = D;
-    static constexpr auto J1 = static_cast<Degree>(1);
-    static constexpr auto J2 = D == 0
-                             ? static_cast<Degree>(3)
-                             : I2 + static_cast<Degree>(1);
+    static constexpr auto J1 = Deg1;  ///< Degree of the 1st output vertex.
+    static constexpr auto J2 = D == Deg0 ? Deg3 : I2 + Deg1;
 
     static constexpr auto d {string_ops::str1<I2>};
     static constexpr auto shortName {string_ops::shName<d, 1, 'e', 'c', '_', 'n'>};
@@ -77,9 +75,9 @@ struct InNewChain {
     using BulkSlot = Chain::BulkSlot;
     using ResT = CmpId;
     using Res = std::array<ResT, 1>;
-    using S = std::conditional_t<D == 0U, ChId,
-                                          std::conditional_t<D == 2U, BulkSlot,
-                                                                      EndSlot>>;
+    using S = std::conditional_t<D == Deg0, ChId,
+                                          std::conditional_t<D == Deg2, BulkSlot,
+                                                                        EndSlot>>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
@@ -106,7 +104,7 @@ protected:
     Graph& gr;  ///< Reference to the graph object.
     decltype(gr.cn)& cn;
 
-    vertex_merger::Functor<1, I2, Graph> merge_vertexes;
+    vertex_merger::From<Deg1, I2, Graph> merge_vertexes;
 
 private:
 
@@ -180,19 +178,19 @@ check_slot(const S s) const
 {
     const auto w = chain_ind(s);
 
-    if constexpr (D == 0)
+    if constexpr (D == Deg0)
 
         // The new edge is attached to a boundary vertex of a disconnected cycle.
         ASSERT(cn[w].is_disconnected_cycle(),
                "chain", w, " is not a disconnected cycle.");
 
-    else if constexpr (D == 2)
+    else if constexpr (D == Deg2)
 
         // The new edge is attached to a three-way junction.
         ASSERT(s.a() && s.a() < cn[w].length(),
                "a ", s.a(), "is not at a bulk edge of chain ", w);
 
-    else if constexpr (D == 3)
+    else if constexpr (D == Deg3)
 
         // The new edge is attached to a four-way junction.
         ASSERT(gr.ngs_at(s).num() == D - 1,
