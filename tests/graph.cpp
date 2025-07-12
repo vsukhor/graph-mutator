@@ -7,7 +7,7 @@
 #include "graph-mutator/structure/edge.h"
 #include "graph-mutator/structure/graph.h"
 #include "graph-mutator/structure/vertices/degrees.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
 
 
 namespace graph_mutator::tests::graph {

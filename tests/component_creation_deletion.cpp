@@ -7,9 +7,9 @@
 #include "graph-mutator/structure/graph.h"
 #include "graph-mutator/transforms/component_creation/functor.h"
 #include "graph-mutator/transforms/component_deletion/functor.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
-#include "graph-mutator/transforms/vertex_merger/functor_22.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_22.h"
 
 
 namespace graph_mutator::tests::component_creation_deletion {

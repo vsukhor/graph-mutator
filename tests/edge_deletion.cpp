@@ -7,11 +7,11 @@
 #include "graph-mutator/structure/chain.h"
 #include "graph-mutator/structure/edge.h"
 #include "graph-mutator/structure/graph.h"
-#include "graph-mutator/transforms/edge_deletion/functor_1.h"
-#include "graph-mutator/transforms/edge_deletion/functor_2.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
-#include "graph-mutator/transforms/vertex_merger/functor_22.h"
+#include "graph-mutator/transforms/edge_deletion/deleting_host_chain.h"
+#include "graph-mutator/transforms/edge_deletion/preserving_host_chain.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_22.h"
 
 namespace graph_mutator::tests::edge_deletion {
 

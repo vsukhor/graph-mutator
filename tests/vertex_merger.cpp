@@ -11,13 +11,13 @@
 #include "graph-mutator/structure/graph.h"
 #include "graph-mutator/structure/io.h"
 #include "graph-mutator/structure/world.h"
-#include "graph-mutator/transforms/vertex_merger/functor_00.h"
-#include "graph-mutator/transforms/vertex_merger/functor_10.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
-#include "graph-mutator/transforms/vertex_merger/functor_13.h"
-#include "graph-mutator/transforms/vertex_merger/functor_20.h"
-#include "graph-mutator/transforms/vertex_merger/functor_22.h"
+#include "graph-mutator/transforms/vertex_merger/from_00.h"
+#include "graph-mutator/transforms/vertex_merger/from_10.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_13.h"
+#include "graph-mutator/transforms/vertex_merger/from_20.h"
+#include "graph-mutator/transforms/vertex_merger/from_22.h"
 
 
 namespace graph_mutator::tests::vertex_merger {

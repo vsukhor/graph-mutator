@@ -9,17 +9,17 @@
 
 #include "common.h"
 #include "graph-mutator/structure/graph.h"
-#include "graph-mutator/transforms/pulling/functor_1.h"
-#include "graph-mutator/transforms/pulling/functor_2.h"
-#include "graph-mutator/transforms/pulling/functor_3.h"
+#include "graph-mutator/transforms/pulling/on_1.h"
+#include "graph-mutator/transforms/pulling/on_2.h"
+#include "graph-mutator/transforms/pulling/on_3.h"
 #include "graph-mutator/transforms/pulling/paths.h"
-#include "graph-mutator/transforms/vertex_merger/functor_00.h"
-#include "graph-mutator/transforms/vertex_merger/functor_10.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
-#include "graph-mutator/transforms/vertex_merger/functor_13.h"
-#include "graph-mutator/transforms/vertex_merger/functor_20.h"
-#include "graph-mutator/transforms/vertex_merger/functor_22.h"
+#include "graph-mutator/transforms/vertex_merger/from_00.h"
+#include "graph-mutator/transforms/vertex_merger/from_10.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_13.h"
+#include "graph-mutator/transforms/vertex_merger/from_20.h"
+#include "graph-mutator/transforms/vertex_merger/from_22.h"
 
 namespace graph_mutator::tests::pulling {
 
@@ -54,10 +54,10 @@ template<Degree D,
          Orientation Dir,
          typename G>
 struct Pulling
-    : public graph_mutator::pulling::Functor<D, Dir, G> {
+    : public graph_mutator::pulling::On<D, Dir, G> {
 
     explicit Pulling(G& graph)
-        : graph_mutator::pulling::Functor<D, Dir, G> {graph}
+        : graph_mutator::pulling::On<D, Dir, G> {graph}
     {}
 };
 

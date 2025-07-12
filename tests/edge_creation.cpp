@@ -9,8 +9,8 @@
 #include "graph-mutator/structure/vertices/degrees.h"
 #include "graph-mutator/transforms/edge_creation/in_new_chain.h"
 #include "graph-mutator/transforms/edge_creation/in_existing_chain.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
 
 
 namespace graph_mutator::tests::edge_creation {

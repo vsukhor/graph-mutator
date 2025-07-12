@@ -32,10 +32,10 @@ limitations under the License.
 
 #include "../../definitions.h"
 #include "../../string_ops.h"
-#include "../vertex_merger/functor_11.h"
+#include "../vertex_merger/from_11.h"
 #include "common.h"
-#include "functor_1B.h"
-#include "functor_13.h"
+#include "to_1B.h"
+#include "to_13.h"
 #include "log.h"
 
 

@@ -35,7 +35,7 @@ limitations under the License.
 #include "../../definitions.h"
 #include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../vertex_split/functor_11.h"
+#include "../vertex_split/to_11.h"
 #include "common.h"
 #include "log.h"
 

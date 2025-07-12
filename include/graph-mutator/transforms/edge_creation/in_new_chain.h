@@ -31,10 +31,10 @@ limitations under the License.
 #include "../../string_ops.h"
 #include "../../structure/graph.h"
 #include "../component_creation/functor.h"
-#include "../vertex_merger/functor_10.h"
-#include "../vertex_merger/functor_11.h"
-#include "../vertex_merger/functor_12.h"
-#include "../vertex_merger/functor_13.h"
+#include "../vertex_merger/from_10.h"
+#include "../vertex_merger/from_11.h"
+#include "../vertex_merger/from_12.h"
+#include "../vertex_merger/from_13.h"
 
 
 namespace graph_mutator::edge_creation {

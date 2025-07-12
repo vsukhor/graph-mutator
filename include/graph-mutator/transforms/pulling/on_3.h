@@ -4,11 +4,11 @@
 #include "../../definitions.h"
 #include "../../string_ops.h"
 #include "../../structure/graph.h"
-#include "../vertex_split/functor_1B.h"
-#include "../vertex_merger/functor_10.h"
-#include "../vertex_merger/functor_12.h"
-#include "../vertex_merger/functor_20.h"
-#include "../vertex_merger/functor_22.h"
+#include "../vertex_split/to_1B.h"
+#include "../vertex_merger/from_10.h"
+#include "../vertex_merger/from_12.h"
+#include "../vertex_merger/from_20.h"
+#include "../vertex_merger/from_22.h"
 #include "common.h"
 #include "functor_base.h"
 #include "log.h"
@@ -20,7 +20,7 @@ namespace graph_mutator::pulling {
 
 template<Orientation Dir,
          typename G>
-struct Functor<Deg3, Dir, G>
+struct On<Deg3, Dir, G>
     : public FunctorBase<G> {
 
     static constexpr auto Direction = Dir;
@@ -46,9 +46,9 @@ struct Functor<Deg3, Dir, G>
     using BulkSlot = Chain::BulkSlot;
     using EndSlot = Chain::EndSlot;
     using Ps = Paths<Cmpt>;
-    using L = Log<Functor<D, Dir, Graph>>;
+    using L = Log<On<D, Dir, Graph>>;
 
-    explicit Functor(Graph& gr);
+    explicit On(Graph& gr);
 
     /**
      * @brief Pulls a vertex of degree 3.
@@ -94,8 +94,8 @@ private:
 
 template<Orientation Dir,
          typename G>
-Functor<Deg3, Dir, G>::
-Functor(Graph& gr)
+On<Deg3, Dir, G>::
+On(Graph& gr)
     : Base {gr}
     , vertex_split_12 {gr}
     , vertex_split_10 {gr}
@@ -109,7 +109,7 @@ Functor(Graph& gr)
 
 template<Orientation Dir,
          typename G>
-auto Functor<Deg3, Dir, G>::
+auto On<Deg3, Dir, G>::
 operator()(
     Ps& pp,
     const int n
@@ -134,7 +134,7 @@ operator()(
 /// Pulls at a connected chain end (converting a 3-node into 4-node)
 template<Orientation Dir,
          typename G>
-void Functor<Deg3, Dir, G>::
+void On<Deg3, Dir, G>::
 pull(Ps& pp)
 {
     const auto iD = pp.d.ind;
@@ -235,7 +235,7 @@ pull(Ps& pp)
 
 template<Orientation Dir,
          typename G>
-void Functor<Deg3, Dir, G>::
+void On<Deg3, Dir, G>::
 check_path(
     const Ps& pp,
     const int n

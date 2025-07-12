@@ -31,8 +31,8 @@ limitations under the License.
 #include "../../string_ops.h"
 #include "../../structure/graph.h"
 #include "../component_deletion/functor.h"
-#include "../vertex_split/functor_1B.h"
-#include "../vertex_split/functor_13.h"
+#include "../vertex_split/to_1B.h"
+#include "../vertex_split/to_13.h"
 
 
 /**

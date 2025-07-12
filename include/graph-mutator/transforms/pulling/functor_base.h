@@ -32,7 +32,7 @@ limitations under the License.
 #include "../../definitions.h"
 #include "../../structure/graph.h"
 #include "../edge_creation/in_existing_chain.h"
-#include "../edge_deletion/functor_1.h"
+#include "../edge_deletion/deleting_host_chain.h"
 #include "paths.h"
 
 

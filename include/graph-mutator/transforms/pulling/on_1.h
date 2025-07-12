@@ -15,7 +15,7 @@ namespace graph_mutator::pulling {
 
 template<Orientation Dir,
          typename G>
-struct Functor<Deg1, Dir, G>
+struct On<Deg1, Dir, G>
     : public FunctorBase<G> {
 
     static constexpr auto Direction = Dir;
@@ -37,13 +37,13 @@ struct Functor<Deg1, Dir, G>
     using Cmpt = Graph::Cmpt;
     using Chain = Graph::Chain;
     using Base = FunctorBase<G>;
-    using L = Log<Functor<D, Dir, Graph>>;
+    using L = Log<On<D, Dir, Graph>>;
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
      * @param gr Graph on which the transformations operate.
      */
-    explicit Functor(Graph& gr);
+    explicit On(Graph& gr);
 
     /**
      * @brief Pulls a vertex of degree 1.
@@ -77,8 +77,8 @@ private:
 
 template<Orientation Dir,
          typename G>
-Functor<Deg1, Dir, G>::
-Functor(Graph& gr)
+On<Deg1, Dir, G>::
+On(Graph& gr)
     : Base {gr}
     , log {*this}
 {}
@@ -86,7 +86,7 @@ Functor(Graph& gr)
 
 template<Orientation Dir,
          typename G>
-auto Functor<Deg1, Dir, G>::
+auto On<Deg1, Dir, G>::
 operator()(
     Paths<Cmpt>& pp,
     int n
@@ -108,7 +108,7 @@ operator()(
 
 template<Orientation Dir,
          typename G>
-void Functor<Deg1, Dir, G>::
+void On<Deg1, Dir, G>::
 check_path(
     const Paths<Cmpt>& pp,
     const int n

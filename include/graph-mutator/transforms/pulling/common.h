@@ -60,7 +60,7 @@ constexpr char signchar = Dir == Orientation::Backwards ? '-' : '+';
 template<Degree D,
          Orientation Dir,
          typename G> requires (is_implemented_degree<D>)
-struct Functor {};
+struct On {};
 
 
 }  // namespace graph_mutator::pulling

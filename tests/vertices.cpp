@@ -8,9 +8,9 @@
 #include "graph-mutator/structure/vertices/all.h"
 #include "graph-mutator/structure/vertices/collections.h"
 #include "graph-mutator/structure/vertices/vertex.h"
-#include "graph-mutator/transforms/vertex_merger/functor_11.h"
-#include "graph-mutator/transforms/vertex_merger/functor_12.h"
-#include "graph-mutator/transforms/vertex_merger/functor_22.h"
+#include "graph-mutator/transforms/vertex_merger/from_11.h"
+#include "graph-mutator/transforms/vertex_merger/from_12.h"
+#include "graph-mutator/transforms/vertex_merger/from_22.h"
 
 
 namespace graph_mutator::tests::vertices {
