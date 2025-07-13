@@ -34,7 +34,7 @@ namespace graph_mutator::structure {
 
 /**
  * @brief Implements integral tests of the graph internal structure and elements.
- * @tparam G Graph class.
+ * @tparam G Graph subjected to the tests.
  */
 template<typename G>
 struct IntegralTests {

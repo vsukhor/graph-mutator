@@ -36,7 +36,7 @@ namespace graph_mutator::component_creation {
 /**
  * @brief Functor class creating specific graph component.
  * @details The component is created as a single chain.
- * @tparam G Graph class.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<typename G>
 struct Functor {
@@ -53,7 +53,7 @@ struct Functor {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit Functor(Graph& gr);
 

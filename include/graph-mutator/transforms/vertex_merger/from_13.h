@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_13.h
+ * @file from_13.h
  * @brief Contains implementation of the for 1V + 3V -> 4V merger type.
  * @details Class encapsulating merger of tip vertex to a 3-way junction.
  * @author Valerii Sukhorukov
@@ -45,7 +45,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Template specialization for V1 + V3 -> V4 vertex merger.
  * @details Adds vertex type-specific vertex merger capability and updates the
  * graph for it.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the merger operation is applied.
  */
 template<typename G>
 struct From<Deg1, Deg3, G> {
@@ -72,7 +72,7 @@ struct From<Deg1, Deg3, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit From(Graph& gr);
 

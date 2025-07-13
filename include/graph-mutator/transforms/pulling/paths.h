@@ -1,3 +1,30 @@
+/* =============================================================================
+
+Copyright (c) 2021-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+*/
+
+/**
+ * @file paths.h
+ * @brief Contains structure for representing paths in the graph in a way
+ * convenient for pulling transformations.
+ * @author Valerii Sukhorukov
+ */
+
 #ifndef GRAPH_MUTATOR_PULLING_PATHS_H
 #define GRAPH_MUTATOR_PULLING_PATHS_H
 
@@ -19,12 +46,12 @@ struct Paths
     : public structure::paths::over_edges::Generic<C> {
 
     using Component = C;
-    using Chain = typename Component::Chain;
+    using Chain = Component::Chain;
     using EndSlot = Chain::EndSlot;
     using Ends = Chain::Ends;
-    using Edge = typename C::Edge;
-    using Base = typename structure::paths::over_edges::Generic<Component>;
-    using Path = typename Base::Path;
+    using Edge =  Component::Edge;
+    using Base = structure::paths::over_edges::Generic<Component>;
+    using Path = Base::Path;
     using PathCh = structure::paths::over_endslots::Generic<Component>::Path;
 //    using Skeleton = paths::Container<Driver>;
     using Source = EndSlot;
@@ -76,8 +103,8 @@ struct Paths
 
     template<Degree D,
              Orientation Dir,
-             typename G> requires (is_implemented_degree<D>)
-        friend struct On;
+             typename G> requires (is_pullable_degree<D>)
+    friend struct On;
 
     using Base::cmp;
 

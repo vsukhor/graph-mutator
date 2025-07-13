@@ -1,3 +1,30 @@
+/* =============================================================================
+
+Copyright (c) 2021-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+*/
+
+/**
+ * @file on_2.h
+ * @brief Contains specialization of the functor for pulling graph
+ * transformation to vertices of degree 2.
+ * @author Valerii Sukhorukov
+ */
+
 #ifndef GRAPH_MUTATOR_PULLING_FUNCTOR_2_H
 #define GRAPH_MUTATOR_PULLING_FUNCTOR_2_H
 
@@ -16,6 +43,11 @@
 namespace graph_mutator::pulling {
 
 
+/**
+ * @brief Functor for the edge pulling initiated from a vertex of degree 2.
+ * @tparam Dir Direction of the pull operation.
+ * @tparam G Graph to which the pull operation is applied.
+ */
 template<Orientation Dir,
          typename G>
 struct On<Deg2, Dir, G>
@@ -23,7 +55,7 @@ struct On<Deg2, Dir, G>
 
     static constexpr auto Direction = Dir;
 
-    /// Degree of the pulled vertex.
+    /// Degree of the vertex from which the pull operation is initiated.
     static constexpr auto D = Deg2;
     static_assert(is_pullable_degree<D>);
 
@@ -47,7 +79,7 @@ struct On<Deg2, Dir, G>
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit On(Graph& gr);
 

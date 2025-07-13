@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_22.h
+ * @file from_22.h
  * @brief Contains implementation of merger between two bulk vertices.
  * @author Valerii Sukhorukov
  */
@@ -45,7 +45,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Template specialization for 2V2 -> V4 vertex merger.
  * @details Adds vertex type-specific vertex merger capability and updates the
  * graph for it.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the merger operation is applied.
  */
 template<typename G>
 struct From<Deg2, Deg2, G> {
@@ -72,7 +72,7 @@ struct From<Deg2, Deg2, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit From(Graph& gr);
 

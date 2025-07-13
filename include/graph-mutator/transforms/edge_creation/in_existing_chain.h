@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_old_chain.h
+ * @file in_existing_chain.h
  * @brief Contains class performing creation of graph edges in existing chain.
  * @author Valerii Sukhorukov
  */
@@ -43,7 +43,7 @@ namespace graph_mutator::edge_creation {
  * of the edge. Because the edge extends an existing chain, the other edge end
  * will have degree 2.
  * @tparam D Degree of one of the vertexes accepting the created edge.
- * @tparam G Graph class.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<Degree D,
          typename G>
@@ -75,7 +75,7 @@ struct InExistingChain {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit InExistingChain(Graph& gr);
 

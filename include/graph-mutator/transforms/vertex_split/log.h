@@ -20,7 +20,7 @@ limitations under the License.
 
 /**
  * @file log.h
- * @brief Contains class responsible for logging summary.
+ * @brief Contains class responsible for logging summary in vertex splits.
  * @details Implementation of the split operation depends on the vertex
  * degree. Degree-specific functors are specializations of the generic template
  * defined here. Besides they are the subclusses of the Core class holding the

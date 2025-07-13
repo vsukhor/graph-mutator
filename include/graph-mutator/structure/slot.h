@@ -20,7 +20,7 @@ limitations under the License.
 
 /**
  * @file slot.h
- * @brief Defines structure handling connectivity of chains.
+ * @brief Defines structure handling connectivity between anf inside chains.
  * @author Valerii Sukhorukov
  */
 

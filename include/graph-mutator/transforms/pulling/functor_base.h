@@ -20,7 +20,7 @@ limitations under the License.
 
 /**
  * @file functor_base.h
- * @brief Contains classes performing pulling.
+ * @brief Base class for deriving degree-specific functors performing pulling.
  * @author Valerii Sukhorukov
  */
 
@@ -39,8 +39,8 @@ limitations under the License.
 namespace graph_mutator::pulling {
 
 /**
- * @brief Functor class template for pulling a specific graph edge.
- * @tparam G Graph class.
+ * @brief Base for deriving functor classes for pulling a specific graph edge.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<typename G>
 struct FunctorBase {
@@ -59,7 +59,7 @@ struct FunctorBase {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit FunctorBase(Graph& gr);
 

@@ -43,7 +43,8 @@ using Prop = szt;
 
 constexpr std::array<Degree, 3> pullableDegrees {1, 2, 3};
 
-template <Degree D> constexpr auto is_pullable_degree =
+template <Degree D>
+constexpr auto is_pullable_degree =
     std::find(pullableDegrees.begin(), pullableDegrees.end(), D) !=
     pullableDegrees.end();
 
@@ -53,13 +54,14 @@ constexpr char signchar = Dir == Orientation::Backwards ? '-' : '+';
 
 
 /**
- * @brief Generic template for vertex degree-specific merger executing classes.
- * @tparam D Degree of the vertex pulled.
- * @tparam G Graph class on which operator() acts.
+ * @brief Generic template for specifying vertex degree-specific pulling classes.
+ * @tparam D Degree of the vertex from which the pull operation is initiated.
+ * @tparam Dir Direction of the pull operation.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<Degree D,
          Orientation Dir,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires (is_pullable_degree<D>)
 struct On {};
 
 

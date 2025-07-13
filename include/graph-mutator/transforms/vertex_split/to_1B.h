@@ -19,9 +19,10 @@ limitations under the License.
 */
 
 /**
- * @file functor_12.h
- * @brief Class performing vertex split in the graph components.
- * @details The split is done at vertices of specific degrees.
+ * @file to_12.h
+ * @brief Contains class template enabling splits of specific graph vertices.
+ * @details This Functor template specialization operates on vertices of
+ * degree 3 to produce a degree 1 vertex and a degree 2 vertex.
  * @author Valerii Sukhorukov
  */
 
@@ -46,7 +47,7 @@ namespace graph_mutator::vertex_split {
  * @details Adds vertex type-specific split capability and updates the
  * graph for it. This Functor template specialization operates on degree 3
  * vertices to produce vertices of degree 1 and 2: V3 -> V1 + V2.
- * @tparam G Graph class on which it operates.
+ * @tparam G Graph to which the split operation is applied.
  */
 template<Degree J2_,
          typename G> requires BulkDegree<J2_>
@@ -73,7 +74,7 @@ struct To<Deg1, J2_, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit To(Graph& gr);
 

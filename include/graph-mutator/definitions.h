@@ -20,7 +20,9 @@ limitations under the License.
 
 /**
  * @file definitions.h
- * @brief graph_mutator namespace-scope gefinitions.
+ * @brief project-scope definitions.
+ * @details Contains various type definitions and utility functions used
+ * throughout the project.
  * @author Valerii Sukhorukov.
  */
 

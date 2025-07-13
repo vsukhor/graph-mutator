@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_00.h
+ * @file from_00.h
  * @brief Contains class managing merger of two boundary vertices of a cycle chain.
  * @author Valerii Sukhorukov
  */
@@ -45,7 +45,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Class encapsulating merger of 2 cycle chains on their boundary vertices.
  * @details Adds vertex type-specific vertex merger capability and updates the
  * graph for it.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the merger operation is applied.
  */
 template<typename G>
 struct From<Deg0, Deg0, G> {
@@ -55,7 +55,7 @@ struct From<Deg0, Deg0, G> {
     static constexpr auto I1 = Deg0;  ///< Degree of the 1st input vertex.
     static constexpr auto I2 = Deg0;  ///< Degree of the 2nd input vertex.
     static constexpr auto J1 = Deg4;  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = undefined<Degree>;       ///< No 2nd output vertex.
+    static constexpr auto J2 = undefined<Degree>;  ///< No 2nd output vertex.
 
     static constexpr auto dd = string_ops::str2<I1, I2>;
     static constexpr auto shortName = string_ops::concat<shortNameStem, dd, 2>;
@@ -72,7 +72,7 @@ struct From<Deg0, Deg0, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit From(Graph& gr);
 

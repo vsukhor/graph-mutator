@@ -33,7 +33,9 @@ limitations under the License.
 
 namespace graph_mutator::structure {
 
-
+/**
+ * @brief Represents the ends of an edge or those of a chain.
+ */
 struct Ends {
 
     using Id = szt;

@@ -19,9 +19,11 @@ limitations under the License.
 */
 
 /**
- * @file functor_BB.h
- * @brief Class performing split of graph components.
- * @details Te split is done at vertices of specific degrees.
+ * @file to_BB.h
+ * @brief Contains class template enabling splits of specific graph vertices.
+ * @details This Functor template specialization operates on vertices of
+ * degree 4 to produce two vertices whose degrees sum up to 4, except 1 and 3,
+ * implemented in a separate functor.
  * @author Valerii Sukhorukov
  */
 
@@ -48,7 +50,7 @@ namespace graph_mutator::vertex_split {
  * on vertices of degree 4 to produce two vertices of degree 2: V4 -> 2V2.
  * The V2 vertices may be either internal chain vertices or boundary vertices of
  * one or two disconnected cycle chains.
- * @tparam G Graph class on which it operates.
+ * @tparam G Graph to which the split operation is applied.
  */
 template<Degree J1_,
          Degree J2_,
@@ -78,7 +80,7 @@ struct To<J1_, J2_, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit To(Graph& gr);
 

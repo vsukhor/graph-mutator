@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_2.h
+ * @file preserving_host_chain.h
  * @brief Contains classes performing deletion of specific graph edges.
  * @author Valerii Sukhorukov
  */
@@ -92,7 +92,7 @@ struct PreservingHostChain {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     constexpr explicit PreservingHostChain(Graph& gr);
 

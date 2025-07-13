@@ -35,7 +35,7 @@ namespace graph_mutator::component_deletion {
 
 /**
  * @brief Functor class deleting specific graph component.
- * @tparam G Graph class.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<typename G>
 struct Functor {
@@ -54,7 +54,7 @@ struct Functor {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit Functor(Graph& gr);
 

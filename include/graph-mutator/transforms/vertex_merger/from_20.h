@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_20.h
+ * @file from_20.h
  * @brief Contains class doing merger of a bulk vertex with a cycle boundary vertex.
  * @author Valerii Sukhorukov
  */
@@ -45,7 +45,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Merger between a bulk and a cycle chain boundary vertices.
  * @details Adds vertex type-specific vertex merger capability and updates the
  * graph for it.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the merger operation is applied.
  */
 template<typename G>
 struct From<Deg2, Deg0, G> {
@@ -72,7 +72,7 @@ struct From<Deg2, Deg0, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit From(Graph& gr);
 

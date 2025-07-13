@@ -47,7 +47,7 @@ constexpr std::array shortNameStem {'v', '_', 's', '_'};
  * specified degrees.
  * @tparam D1 Degree of the 1st resulting vertex.
  * @tparam D2 Degree of the 2nd resulting vertex.
- * @tparam G Graph type on which the split operation is performed.
+ * @tparam G Graph to which the split operation is applied.
  */
 template<Degree D1,
          Degree D2,

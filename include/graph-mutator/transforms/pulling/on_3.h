@@ -1,3 +1,30 @@
+/* =============================================================================
+
+Copyright (c) 2021-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+*/
+
+/**
+ * @file on_3.h
+ * @brief Contains specialization of the functor for pulling graph
+ * transformation to vertices of degree 3.
+ * @author Valerii Sukhorukov
+ */
+
 #ifndef GRAPH_MUTATOR_PULLING_FUNCTOR_3_H
 #define GRAPH_MUTATOR_PULLING_FUNCTOR_3_H
 
@@ -18,6 +45,11 @@
 namespace graph_mutator::pulling {
 
 
+/**
+ * @brief Functor for the edge pulling initiated from a vertex of degree 3.
+ * @tparam Dir Direction of the pull operation.
+ * @tparam G Graph to which the pull operation is applied.
+ */
 template<Orientation Dir,
          typename G>
 struct On<Deg3, Dir, G>
@@ -25,7 +57,7 @@ struct On<Deg3, Dir, G>
 
     static constexpr auto Direction = Dir;
 
-    /// Degree of the pulled vertex.
+    /// Degree of the vertex from which the pull operation is initiated.
     static constexpr auto D = Deg3;
     static_assert(is_pullable_degree<D>);
 
@@ -54,7 +86,7 @@ struct On<Deg3, Dir, G>
      * @brief Pulls a vertex of degree 3.
      * @details Pulls the vertex at the end of the path, converting it to a 4-node.
      * @param pp Path to the vertex to pull.
-     * @param n Number of pulling steps.
+     * @param n Number of steps to pull over.
      * @return Result containing the component ID after the pull operation.
      */
     auto operator()(

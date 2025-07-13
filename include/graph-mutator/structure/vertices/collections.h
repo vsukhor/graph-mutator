@@ -46,7 +46,7 @@ namespace graph_mutator::structure::vertices {
 /**
  * @brief Template for classes updating degree-specific vertex collections.
  * @tparam D Vertex degree.
- * @tparam G Graph class supplying the vertices.
+ * @tparam G Graph containing the vertices.
  */
 template<Degree D,
          typename G> requires (is_implemented_degree<D>)

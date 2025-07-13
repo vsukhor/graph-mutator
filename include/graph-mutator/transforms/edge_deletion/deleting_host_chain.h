@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_1.h
+ * @file deleting_host_chain.h
  * @brief Struct performing deletion of graph edges along with host chain.
  * @author Valerii Sukhorukov
  */
@@ -97,7 +97,7 @@ struct DeletingHostChain {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     constexpr explicit DeletingHostChain(Graph& gr);
 

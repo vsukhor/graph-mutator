@@ -20,7 +20,7 @@ limitations under the License.
 
 /**
  * @file log.h
- * @brief Contains class responsible for logging summary of pulling.
+ * @brief Contains class responsible for logging the summary of pulling transformations.
  * @author Valerii Sukhorukov
  */
 
@@ -29,12 +29,16 @@ limitations under the License.
 
 #include <array>
 
-#include "paths.h"  // because of Log
+#include "paths.h"  // for Log
 
 
 namespace graph_mutator::pulling {
 
-
+/**
+ * @brief Functor for logging the summary of pulling transformations.
+ * @tparam F Functor class for the edge pulling initiated from a vertex of
+ * specific degree.
+ */
 template<typename F>
 struct Log {
 

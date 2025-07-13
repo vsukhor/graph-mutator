@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_new_chain.h
+ * @file in_new_chain.h
  * @brief Contains class performing creation of graph edges in new chain.
  * @author Valerii Sukhorukov
  */
@@ -47,7 +47,7 @@ namespace graph_mutator::edge_creation {
  * incremented by addition of the new chain branching from it. Because the new
  * chain has length 1, the other vertex of the new edge has degree 1.
  * @tparam D Degree of one of the vertexes accepting the created edge.
- * @tparam G Graph class.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<Degree D,
          typename G>
@@ -81,7 +81,7 @@ struct InNewChain {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit InNewChain(Graph& gr);
 

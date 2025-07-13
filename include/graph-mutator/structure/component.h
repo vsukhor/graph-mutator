@@ -309,15 +309,14 @@ private:
 
     Chains& cn;  ///< Reference to the parent chains container.
 
-
-    ChIds visited;  ///< Auxiliary: IDs of chains visited during the search.
+    ChIds visited;  ///< Auxiliary: IDs of chains visited during a search.
 
     template<bool knownSize>
     void reset_search() noexcept;
 
     /**
      * @brief Depth-first search of the graph graph.
-     * @note Assumes that initializations of the auxiliary variables are
+     * @note Assumes that initialization of the auxiliary variables is
      * already done.
      * @tparam knownSize if true enumerates over this cluster,
      * otherwise - over the whole graph

@@ -50,8 +50,8 @@ namespace graph_mutator::structure::vertices {
 /**
  * @brief The Collection of vertices classified by degree.
  * @details Encapsulates vertex containers and the uppper-level machinery for
- * updaring and exporting their contents.
- * @tparam G Graph type the vertices belong to.
+ * updating and exporting their contents.
+ * @tparam G Graph containing the vertices.
 */
 template<typename G>
 struct All {

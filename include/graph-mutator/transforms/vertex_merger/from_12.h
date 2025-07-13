@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 /**
- * @file functor_12.h
+ * @file from_12.h
  * @brief Contains class encapsulating tip-to-side vertex merger.
  * @note Simplified version of the functor class was also used in
  * https://github.com/vsukhor/mitoSim/blob/master/include/ability_for_fusion.h
@@ -47,7 +47,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Template specialization for V1 + V2 -> V3 vertex merger.
  * @details Adds vertex type-specific vertex merger capability and updates the
  * graph for it.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the merger operation is applied.
  */
 template<typename G>
 struct From<Deg1, Deg2, G> {
@@ -74,7 +74,7 @@ struct From<Deg1, Deg2, G> {
 
     /**
      * @brief Constructs a Functor object based on the Graph instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit From(Graph& gr);
 

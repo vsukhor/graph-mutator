@@ -1,3 +1,32 @@
+/* =============================================================================
+
+Copyright (c) 2021-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+*/
+
+/**
+ * @file vector_container.h
+ * @brief Contains definition of a vector container class.
+ * @details This class provides a simple wrapper around std::vector to manage
+ * elements of a specific type. It provides basic functionalities such as
+ * accessing elements, checking size, and modifying the container.
+ * @author Valerii Sukhorukov
+ */
+
 #ifndef GRAPH_MUTATOR_VECTOR_CONTAINER_H
 #define GRAPH_MUTATOR_VECTOR_CONTAINER_H
 
@@ -6,8 +35,14 @@
 
 namespace graph_mutator {
 
-
-template<typename Type>
+/**
+ * @brief Contains definition of a vector container class.
+ * @details This class provides a simple wrapper around std::vector to manage
+ * elements of a specific type. It provides basic functionalities such as
+ * accessing elements, checking size, and modifying the container.
+ * @tparam Type Type of elements stored in the container.
+ */
+ template<typename Type>
 struct VectorContainer {
 
     using Container = std::vector<Type>;

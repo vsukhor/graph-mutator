@@ -45,7 +45,7 @@ namespace graph_mutator::vertex_merger {
  * @brief Encapsulates core vertex merger operations.
  * @details Elementary dynamics and updates the graph for it.
  * Forms base for clases adding more specific types of dynamics.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<typename G>
 struct Core {
@@ -60,7 +60,7 @@ struct Core {
 
     /**
      * @brief Constructs a Core object from the Graph class instance.
-     * @param gr Graph on which the transformations operate.
+     * @param gr Graph to which the transformation is applied.
      */
     explicit constexpr Core(Graph& gr,
                             std::string&& shortName);

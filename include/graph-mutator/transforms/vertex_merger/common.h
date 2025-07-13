@@ -43,7 +43,7 @@ constexpr std::array shortNameStem {'v', '_', 'm', '_'};
  * @brief Generic template for vertex degree-specific merger executing classes.
  * @tparam I1 Degree of the 1st input vertex.
  * @tparam I2 Degree of the 2nd input vertex.
- * @tparam G Graph class on which operator() acts.
+ * @tparam G Graph to which the transformation is applied.
  */
 template<Degree I1,
          Degree I2,
