@@ -64,6 +64,8 @@ struct Graph {
 
     static constexpr bool useAgl {};
 
+    enum class CoreElements {Edge, Vertex};
+
     using Chain = Ch;
     using Edge = Chain::Edge;
     using EndSlot = Chain::EndSlot;
@@ -73,7 +75,8 @@ struct Graph {
     using Cmpt = Component<Chain>;
     using Components = components::Container<Cmpt>;
     using Chains = Cmpt::Chains;
-    template<Degree D> using Vertex = vertices::Vertex<D, typename Ch::Slot<D>>;
+    template<Degree D>
+    using Vertex = vertices::Vertex<D, typename Ch::Slot<D>>;
     using Vertices = vertices::All<Graph>;
     using PathsOverEndSlots = paths::over_endslots::Generic<Cmpt>;
 
