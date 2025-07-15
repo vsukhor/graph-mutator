@@ -79,7 +79,13 @@ struct On<Deg3, Dir, G>
     using EndSlot = Chain::EndSlot;
     using Ps = Paths<Cmpt>;
     using L = Log<On<D, Dir, Graph>>;
+    using ResT = CmpId;
+    using Res = std::array<ResT, 1>;
 
+    /**
+     * @brief Constructs this functor object based on the Graph instance.
+     * @param gr Graph to which the transformation is applied.
+     */
     explicit On(Graph& gr);
 
     /**
