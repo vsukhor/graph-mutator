@@ -35,12 +35,6 @@ limitations under the License.
 
 namespace graph_mutator::pulling {
 
-using ResT = CmpId;
-using Res = std::array<ResT, 1>;
-constexpr Res resUndefined = {undefined<ResT>};
-
-using Prop = szt;
-
 constexpr std::array<Degree, 3> pullableDegrees {1, 2, 3};
 
 template <Degree D>
