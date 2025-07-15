@@ -62,9 +62,16 @@ struct PreservingHostChain {
     using ResT = CmpId;
     using Res = std::array<ResT, 1>;
 
-    // This is a multi-edge chain, so one of the edge ends has degree 2.
+    /**
+     * @brief Vertex degree at the 1st end of the deleted edge.
+     * @note This is a multi-edge chain, so this verex has degree 2.
+     */
     static constexpr auto I1 = Deg2;
-    /// This is a multi-edge chain, so one of the edge ends has arbitrary degree.
+
+    /**
+     * @brief Vertex degree at the 2nd end of the deleted edge.
+     * @note This verex can have arbitrary implemented degree.
+     */
     static constexpr auto I2 = D;
 
     static constexpr auto J1 = undefined<Degree>;
