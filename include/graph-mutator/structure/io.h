@@ -162,8 +162,7 @@ to_json() const
                        ".json");
 
     std::ofstream ofs {file};
-    if (ofs.fail())
-        abort("Unable to open file for writing: ", file);
+    ENSURE(!ofs.fail(), "Unable to open file for writing: ", file);
 
     log_("Exporting graph to ", file, " ...");
 

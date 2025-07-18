@@ -779,16 +779,16 @@ remove_slot_from_neigs(const EndSlot& s)
         auto& ngs = ngs_at(ne);
 
         // Remove oldn from the neig list of its j-th neig
+        const auto ngsOK = ngs.remove(s);
 
-        if (!ngs.remove(s))
-            abort("EndSlot {", s.w, " ", s.e, "} not found among",
-                  "ngs of the slot {", ne.w, " ", ne.e, " connected to it");
+        ENSURE(ngsOK, "EndSlot {", s.w, " ", s.e, "} not found among",
+                      "ngs of the slot {", ne.w, " ", ne.e, " connected to it");
 
         // Remove the j-th neig from the oldn's list of neigs
+        const auto neOK = sr.remove(ne);
 
-        if (!sr.remove(ne))
-            abort("EndSlot {", ne.w, " ", ne.e, "} not found among",
-                  "ngs of the slot {", s.w, " ", s.e, " connected to it");
+        ENSURE(neOK, "EndSlot {", ne.w, " ", ne.e, "} not found among",
+                     "ngs of the slot {", s.w, " ", s.e, " connected to it");
     }
 }
 
@@ -808,9 +808,10 @@ replace_slot_in_neigs(
 
         auto& ne_ngs = ngs_at(ne);
 
-        if (!ne_ngs.replace(old, nov))
-            abort("EndSlot {", old.w, " ", old.e, "} not found among",
-                  "ngs of the slot {", ne.w, " ", ne.e, " connected to it");
+        const auto ok = ne_ngs.replace(old, nov);
+
+        ENSURE(ok, "EndSlot {", old.w, " ", old.e, "} not found among",
+                    "ngs of the slot {", ne.w, " ", ne.e, " connected to it");
     }
 }
 

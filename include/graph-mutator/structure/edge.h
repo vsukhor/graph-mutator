@@ -160,17 +160,17 @@ struct Edge {
 
     /**
      * @brief Ensures that the edge indexes are consistant within the graph.
-     * @param maxInd Total number of edges in the graph.
-     * @param maxIndC Number of edges in the component.
-     * @param maxIndW Number of edges in the chain.
-     * @param numCh Number of chains in the graph.
-     * @param numCmpt Number of disconnected components in the graph.
+     * @param nInd Total number of edges in the graph.
+     * @param nIndC Number of edges in the component.
+     * @param nIndW Number of edges in the chain.
+     * @param nCh Number of chains in the graph.
+     * @param nCmpt Number of disconnected components in the graph.
     */
-    void check(Id maxInd,
-               Id maxIndC,
-               Id maxIndW,
-               ChId numCh,
-               CmpId numCmpt) const;
+    void check(Id nInd,
+               Id nIndC,
+               Id nIndW,
+               ChId nCh,
+               CmpId nCmpt) const;
 
 private:
 
@@ -359,34 +359,35 @@ print(const std::string& prefix,
 
 template<Degree D>
 void Edge<D>::
-check(const Id maxInd,
-      const Id maxIndC,
-      const Id maxIndW,
-      const ChId numCh,
-      const CmpId numCmpt) const
+check(const Id nInd,
+      const Id nIndC,
+      const Id nIndW,
+      const ChId nCh,
+      const CmpId nCmpt) const
 {
-    if (ind >= maxInd)
-        abort("Edge.check(): Edge.ind is out of range: ",
-              "ind = ", ind, ", edgenum = ", maxInd);
+    ENSURE(ind < nInd,
+           "Edge.cEdge.ind is out of range: ",
+           "ind = ", ind, ", edgenum = ", nInd);
 
-    if (indc >= maxIndC)
-        abort("Edge.check(): Edge.indc is out of range for ",
-              "ind ", ind, ": ", "indc = ", indc, ", maxIndC = ", maxIndC);
+    ENSURE(indc < nIndC,
+           "Edge.indc is out of range for ",
+           "ind ", ind, ": ", "indc = ", indc, ", nIndC = ", nIndC);
 
-    if (indw >= maxIndW)
-        abort("Edge.check(): Edge.indw is out of range for ",
-              "ind ", ind, ": ", "indw = ", indw, ", maxIndW = ", maxIndW);
+    ENSURE(indw < nIndW,
+           "EdgEdge.indw is out of range for ",
+           "ind ", ind, ": ", "indw = ", indw, ", nIndW = ", nIndW);
 
-    if (w >= numCh)
-        abort("Edge.check(): Edge.w is out of range for ",
-              "ind ", ind, ": ", "w = ", w, ", numCh = ", numCh);
-    if (c >= numCmpt)
-        abort("Edge.check(): Edge.c is out of range for ",
-              "ind ", ind, ": ", "c = ", c, ", numCmpt = ", numCmpt);
+    ENSURE(w < nCh,
+           "Edge.w is out of range for ",
+           "ind ", ind, ": ", "w = ", w, ", nCh = ", nCh);
 
-    if (weight >= maxWeight)
-        abort("Edge.check(): Edge.weight is out of range for ",
-              "ind ", ind, ": ", "weight = ", weight, ", maxWeight = ", maxWeight);
+    ENSURE(c < nCmpt,
+           "Edge.c is out of range for ",
+           "ind ", ind, ": ", "c = ", c, ", nCmpt = ", nCmpt);
+
+    ENSURE(weight <= maxWeight,
+           "Edge.weight is out of range for ",
+           "ind ", ind, ": ", "weight = ", weight, ", nWeight = ", maxWeight);
 }
 
 using EdgeBase = Edge<maxDegree>;

@@ -127,7 +127,7 @@ operator()(const S& s) noexcept -> Res
     }
 
     if constexpr (std::is_same_v<S, BulkSlot>)
-        ASSERT(a && a <= m.length(), "vertex at ", a, "is not bulk");
+        ASSERT(a && a <= m.length(), "vertex at ", a, " is not bulk");
 
     Edge eg {gr.edgenum++};
     const auto ep = m.insert_edge(std::move(eg), a);

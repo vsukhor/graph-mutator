@@ -20,7 +20,7 @@ limitations under the License.
 
 /**
  * @file integral_tester.h
- * @brief Contains class encapsulating intergal tester of the graph structure.
+ * @brief Contains class encapsulating intergal testing of the graph structure.
  * @author Valerii Sukhorukov.
  */
 
@@ -44,7 +44,7 @@ struct IntegralTests {
     using Ends = Chain::Ends;
     using EndSlot = Chain::EndSlot;
 
-    explicit IntegralTests(const Graph& gr);
+    constexpr explicit IntegralTests(const Graph& gr);
 
     /**
      * @brief Runs consecutively all the specific tests implemented here.
@@ -101,7 +101,7 @@ private:
     const Graph& gr;  ///< Reference to the graph object.
 
 
-    // References to some of graph class fields for convenience:
+    // Const references to some of graph class fields for convenience:
 
     const Graph::Chains& cn;  ///< Reference to the graph edge chains.
     const EgId& edgenum;  ///< Current number of edges.
@@ -111,13 +111,14 @@ private:
      /// Mapping of edge indexes to positions within chains.
     const EgIds& gla;
 
-    const Graph::Components&    ct;  ///< Chain indices segregated into components.
+    const Graph::Components& ct;  ///< Chain indices segregated into components.
 };
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename G>
+constexpr
 IntegralTests<G>::
 IntegralTests(const Graph& gr)
     : gr {gr}
@@ -202,15 +203,14 @@ components(const itT it) const
         cids[i] = cn[i].c;
 
     const auto maxv = *std::max_element(cids.begin(), cids.end());
-    if (maxv != gr.ind_last_cmpt())
-        abort("ERROR check.components: in iter ", it,
-              ": max cn.c != max component index (with max cn.c = ", maxv,
-              ", number of components = ", gr.cmpt_num(), ")");
+
+    ENSURE(maxv == gr.ind_last_cmpt(),
+           "at iteration ", it,
+           ": max cn.c = ", maxv, " != number of components = ", gr.cmpt_num());
 
     const auto minv = *std::min_element(cids.begin(), cids.end());
-    if (minv != 0)
-        abort("ERROR check.components: in iter ", it,
-              " min cn.c ", minv, " is not 0");
+
+    ENSURE(minv == 0, "at iteration ", it, " min cn.c ", minv, " is not 0");
 
 
 //    using BaseEdgeType = utils::graph::EdgeType<real,
@@ -267,18 +267,18 @@ components(const itT it) const
 */
     for (const auto& c : ct) {
         for (const auto w : c.ww) {
-            if (cn[w].c != c.ind)
-                abort("ERROR check.components: at iteration ", it,
-                      " error1 in c.ww for w ", w, ", c.ind ", c.ind);
-            for (const auto e: Ends::Ids)
+
+            ENSURE(cn[w].c == c.ind,
+                   "at iter ", it, " in c.ww for w ", w, ", c.ind ", c.ind);
+
+           for (const auto e: Ends::Ids)
                 for (const auto& ng: cn[w].ngs[e]())
                     if (cn[ng.w].c != c.ind) {
                         cn[w].print(" wrong ng c ");
                         cn[ng.w].print(" wrong ng c ");
-                        abort("ERROR check.components: at iteration ", it,
-                              " errorN in c.ww for w ", w, ", c.ind ", c.ind,
-                              " in ng {", ng.w, " ", Ends::str(ng.e), "} c is wrong: ",
-                              cn[ng.w].c);
+                        abort("at iteration ", it, " errorN in c.ww for w ", w,
+                              ", c.ind ", c.ind, " in ng {", ng.w, " ",
+                              Ends::str(ng.e), "} c is wrong: ", cn[ng.w].c);
                     }
         }
         for (ChId idc {}; idc<c.num_chains(); ++idc) {
@@ -287,87 +287,95 @@ components(const itT it) const
                 if (cn[w].idc == idc) {
                     found = true; break;
                 }
-            if (!found) {
-                c.print("err_2");
-                abort("ERROR check.components: at iteration ", it,
-                      " error2 idc ", idc, " not found, c.ind ", c.ind);
-            }
+            c.ensure(
+                found,
+                "err_2",
+                "at iter ", it, " idc ", idc, " not found, ind ", c.ind
+            );
         }
     }
-    for (ChId im=0; im<gr.chain_num(); ++im)
-        for (const auto& o : cn[im].g)
-            if (o.c != cn[im].c)
-                abort("ERROR check.components: at iteration ", it,
-                      " in g.c != cn.c for cn: ", im);
 
-    vec2<CmpId> clinds(gr.cmpt_num());
+    for (ChId w=0; w<gr.chain_num(); ++w)
+        for (const auto& o : cn[w].g) {
+            ENSURE(o.c == cn[w].c,
+                   "at iteration ", it, " in g.c != cn.c for cn: ", w);
+        }
+
+    const auto numeg = ct[ic].num_edges();
+
+    vec2<CmpId> cc(gr.cmpt_num());
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic)
-        clinds[ic].resize(ct[ic].num_edges());
+        cc[ic].resize(numeg);
 
     for (const auto& m: cn)
         for (const auto& o : m.g)
-            ++clinds[o.c][o.indc];
+            ++cc[o.c][o.indc];
 
-    for (ChId im=0; im<gr.chain_num(); ++im)
-        for (const auto& o : cn[im].g)
-            if (o.c != cn[im].c)
-                abort("ERROR check.components: at iteration ", it,
-                      " cn[im].g[i].c != cn[im].c for cn: ", im);
+    for (ChId w=0; w<gr.chain_num(); ++w)
+        for (const auto& o : cn[w].g) {
+            ENSURE(o.c == cn[w].c,
+                   "at iteration ", it, " cn[w].g[i].c != cn[w].c for w: ", w);
+        }
 
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic) {
-        if (std::accumulate(clinds[ic].begin(), clinds[ic].end(), EgId{}) !=
-            ct[ic].num_edges())
-            abort("ERROR check.components: at iteration ", it,
-                  " sum(clinds[ic]) != component num edges for ic: ", ic);
-        if (*std::min_element(clinds[ic].begin(), clinds[ic].end()) != 1)
-            abort("ERROR check.components: at iteration ", it,
-                  " minval(clinds[ic]) != 1 for ic: ", ic);
-        if (*std::max_element(clinds[ic].begin(), clinds[ic].end()) != 1)
-            abort("ERROR check.components: at iteration ", it,
-                  " maxval(clinds[ic]) != 1 for ic: ", ic);
+        ENSURE(std::accumulate(cc[ic].begin(), cc[ic].end(), EgId{}) == numeg,
+               "at iteration ", it,
+               " sum(cc[ic]) != component num edges for ic: ", ic);
+        ENSURE(*std::min_element(cc[ic].begin(), cc[ic].end()) == 1,
+               "at iteration ", it,
+               " minval(cc[ic]) != 1 for ic: ", ic);
+        ENSURE(*std::max_element(cc[ic].begin(), cc[ic].end()) == 1,
+               "at iteration ", it,
+               " maxval(cc[ic]) != 1 for ic: ", ic);
     }
 
-    for (auto& o: clinds)
+    for (auto& o: cc)
         o.clear();
 
     for (const auto& m: cn)
         for (const auto& o : m.g)
-            clinds[o.c].push_back(o.indc);
+            cc[o.c].push_back(o.indc);
 
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic) {
-        if (clinds[ic].size() != ct[ic].num_edges())
-            abort("ERROR check.components: at iteration ", it,
-                  " W:: clinds[ic].size() != component num edges",
-                  " for ic: ", ic);
-        if (*std::min_element(clinds[ic].begin(), clinds[ic].end()) != 0)
-            abort("ERROR check.components: at iteration ", it,
-                  " W:: minval( clinds[ic] ) != 0 for ic: ", ic);
-        if (*std::max_element(clinds[ic].begin(), clinds[ic].end()) !=
-            ct[ic].num_edges()-1)
-            abort("ERROR check.components: at iteration ", it,
-                  " W:: maxval(clinds[ic]) != component num edges - 1",
-                  " for ic: ", ic);
+        ENSURE(cc[ic].size() == numeg,
+               "at iteration ", it,
+               " W:: cc[ic].size() != component num edges for ic: ", ic);
+        ENSURE(*std::min_element(cc[ic].begin(), cc[ic].end()) == 0,
+               "at iteration ", it,
+               " W:: minval( cc[ic] ) != 0 for ic: ", ic);
+        ENSURE(
+            *std::max_element(cc[ic].begin(), cc[ic].end()) == numeg-1,
+            "at iteration ", it,
+            " W:: maxval(cc[ic]) != component num edges - 1", " for ic: ", ic);
     }
 
     for (const auto& cmp: ct) {
-        if (cmp.gl.size() != cmp.num_edges())
-            abort("ERROR check.components: at iteration ", it,
-                  " cmp.gl.size() ", cmp.gl.size(), " != cmp.num_edges()",
-                  " for ic: ", cmp.ind);
+
+        cmp.ensure(
+            cmp.gl.size() == cmp.num_edges(),
+            "ERR",
+            "at iteration ", it,
+            " cmp.gl.size() ", cmp.gl.size(), " != cmp.num_edges()",
+            " for ic: ", cmp.ind
+        );
+
         for (szt i {}; const auto& o : cmp.gl) {
+
             const auto& eg = cn[o.w].g[o.a];
-            if (eg.indc != i++) {
-                cmp.print("ERR");
-                abort("ERROR check.components: at iteration ", it,
-                    " eg.indc ", eg.indc, " != i ", i - 1,
-                    " for ic: ", cmp.ind, " w ", o.w, " a ", o.a);
-            }
-            if (eg.ind != o.i) {
-                cmp.print("ERR");
-                abort("ERROR check.components: at iteration ", it,
-                    " eg.ind ", eg.ind, " != o.i ", o.i,
-                    " for ic: ", cmp.ind);
-            }
+
+            cmp.ensure(
+                eg.indc == i++,
+                "ERR",
+                "at iteration ", it,
+                " eg.indc ", eg.indc, " != i ", i - 1,
+                " for ic: ", cmp.ind, " w ", o.w, " a ", o.a
+            );
+            cmp.ensure(
+                eg.ind == o.i,
+                "ERR",
+                "at iteration ", it,
+                " eg.ind ", eg.ind, " != o.i ", o.i, " for ic: ", cmp.ind
+            );
         }
     }
 }
@@ -385,65 +393,65 @@ vertex_numbers(itT it) const
         return n;
     };
 
-    if (nvct.template operator()<0>() != gr.vertices.template num<0>())
-        abort("vertex_numbers by cmpts test faled for D = ", 0,"  -- ",
-              "expected: ", gr.vertices.template num<0>(),
-              ", actual: ", nvct.template operator()<0>());
+    ENSURE(nvct.template operator()<0>() == gr.vertices.template num<0>(),
+           "vertex_numbers by cmpts test faled for D = ", 0,"  -- ",
+           "expected: ", gr.vertices.template num<0>(),
+           ", actual: ", nvct.template operator()<0>());
 
-    if (nvct.template operator()<1>() != gr.vertices.template num<1>())
-        abort("vertex_numbers by cmpts test faled for D = ", 1,"  -- ",
-              "expected: ", gr.vertices.template num<1>(),
-              ", actual: ", nvct.template operator()<1>());
+    ENSURE(nvct.template operator()<1>() == gr.vertices.template num<1>(),
+           "vertex_numbers by cmpts test faled for D = ", 1,"  -- ",
+           "expected: ", gr.vertices.template num<1>(),
+           ", actual: ", nvct.template operator()<1>());
 
-    if (nvct.template operator()<2>() != gr.vertices.template num<2>())
-        abort("vertex_numbers by cmpts test faled for D = ", 2,"  -- ",
-              "expected: ", gr.vertices.template num<2>(),
-              ", actual: ", nvct.template operator()<2>());
+    ENSURE(nvct.template operator()<2>() == gr.vertices.template num<2>(),
+           "vertex_numbers by cmpts test faled for D = ", 2,"  -- ",
+           "expected: ", gr.vertices.template num<2>(),
+           ", actual: ", nvct.template operator()<2>());
 
-    if (nvct.template operator()<3>() != gr.vertices.template num<3>())
-        abort("vertex_numbers by cmpts test faled for D = ", 3,"  -- ",
-              "expected: ", gr.vertices.template num<3>(),
-              ", actual: ", nvct.template operator()<3>());
+    ENSURE(nvct.template operator()<3>() == gr.vertices.template num<3>(),
+           "vertex_numbers by cmpts test faled for D = ", 3,"  -- ",
+           "expected: ", gr.vertices.template num<3>(),
+           ", actual: ", nvct.template operator()<3>());
 
-    if (nvct.template operator()<4>() != gr.vertices.template num<4>())
-        abort("vertex_numbers by cmpts test faled for D = ", 4,"  -- ",
-              "expected: ", gr.vertices.template num<4>(),
-              ", actual: ", nvct.template operator()<4>());
+    ENSURE(nvct.template operator()<4>() == gr.vertices.template num<4>(),
+           "vertex_numbers by cmpts test faled for D = ", 4,"  -- ",
+           "expected: ", gr.vertices.template num<4>(),
+           ", actual: ", nvct.template operator()<4>());
 
     auto nvcn = [&]<Degree D>() noexcept -> szt
     {
         szt k {};
         for (const auto& m: cn)
-             k += m.template num_vertices<D>();
+            k += m.template num_vertices<D>();
 
-        return D == 3 ? k/3 :
-               D == 4 ? k/4 : k;
+        return D == Deg3 ? k/3 :
+               D == Deg4 ? k/4 : k;
     };
+é
+    ENSURE(nvcn.template operator()<0>() == gr.vertices.template num<0>(),
+           "vertex_numbers by chains test faled for D = ", 0,"  -- ",
+            "expected: ", gr.vertices.template num<0>(),
+            ", actual: ", nvcn.template operator()<0>());
 
-    if (nvcn.template operator()<0>() != gr.vertices.template num<0>())
-        abort("vertex_numbers by chains test faled for D = ", 0,"  -- ",
-              "expected: ", gr.vertices.template num<0>(),
-              ", actual: ", nvcn.template operator()<0>());
+    ENSURE(nvcn.template operator()<1>() == gr.vertices.template num<1>(),
+           "vertex_numbers by chains test faled for D = ", 1,"  -- ",
+           "expected: ", gr.vertices.template num<1>(),
+           ", actual: ", nvcn.template operator()<1>());
 
-    if (nvcn.template operator()<1>() != gr.vertices.template num<1>())
-        abort("vertex_numbers by chains test faled for D = ", 1,"  -- ",
-                  "expected: ", gr.vertices.template num<1>(),
-                  ", actual: ", nvcn.template operator()<1>());
+    ENSURE(nvcn.template operator()<2>() == gr.vertices.template num<2>(),
+           "vertex_numbers by chains test faled for D = ", 2,"  -- ",
+            "expected: ", gr.vertices.template num<2>(),
+            ", actual: ", nvcn.template operator()<2>());
 
-    if (nvcn.template operator()<2>() != gr.vertices.template num<2>())
-        abort("vertex_numbers by chains test faled for D = ", 2,"  -- ",
-              "expected: ", gr.vertices.template num<2>(),
-              ", actual: ", nvcn.template operator()<2>());
+    ENSURE(nvcn.template operator()<3>() == gr.vertices.template num<3>(),
+           "vertex_numbers by chains test faled for D = ", 3,"  -- ",
+           "expected: ", gr.vertices.template num<3>(),
+           ", actual: ", nvcn.template operator()<3>());
 
-    if (nvcn.template operator()<3>() != gr.vertices.template num<3>())
-        abort("vertex_numbers by chains test faled for D = ", 3,"  -- ",
-              "expected: ", gr.vertices.template num<3>(),
-              ", actual: ", nvcn.template operator()<3>());
-
-    if (nvcn.template operator()<4>() != gr.vertices.template num<4>())
-        abort("vertex_numbers by chains test faled for D = ", 4,"  -- ",
-              "expected: ", gr.vertices.template num<4>(),
-              ", actual: ", nvcn.template operator()<4>());
+    ENSURE(nvcn.template operator()<4>() == gr.vertices.template num<4>(),
+           "vertex_numbers by chains test faled for D = ", 4,"  -- ",
+           "expected: ", gr.vertices.template num<4>(),
+            ", actual: ", nvcn.template operator()<4>());
 }
 
 
@@ -451,14 +459,13 @@ template<typename G>
 void IntegralTests<G>::
 loops() const
 {
-    for (const auto& m: cn) {
-        if (m.is_cycle() &&
-            m.length() < 2) {
-            m.print(" L ");
-            abort("Error: Forbidden loop found ",
-                  "in chain ", m.idw, " printed above");
-        }
-    }
+    for (const auto& m: cn)
+        m.ensure(
+            m.is_cycle() &&
+            m.length() < minCycleLength,
+            " L ",
+            "Forbidden loop found ","in chain ", m.idw, " printed above"
+        );
 }
 
 
@@ -483,10 +490,11 @@ consistency(const itT it) const
                 const auto ce = s.e;
                 const auto& ss = cn[cnei].ngs[ce]();
                 const EndSlot ij {i, j};
-                auto itr =
-                    std::find_if(std::begin(ss),
-                                 std::end(ss),
-                                 [&](const EndSlot& v){ return v == ij; });
+                auto itr = std::find_if(
+                    std::begin(ss),
+                    std::end(ss),
+                    [&](const EndSlot& v){ return v == ij; }
+                );
                 if (ss.end() == itr) {
                     gr.print_chains("TEST FAILED ");
                     log_("");
@@ -495,16 +503,15 @@ consistency(const itT it) const
                           " cnei = ", cnei, " ce = ", ce);
                 }
             }
-            if (cn[i].ngs[j].has_repeating_slots())
-                abort("Error: consistency test failed: same neig and end",
-                      " in chain ", i,  ", end ", j, " at iteration ", it);
-
+            ENSURE(!cn[i].ngs[j].has_repeating_slots(),
+                   "Consistency test failed: same neig and end",
+                   " in chain ", i, ", end ", j, " at iteration ", it);
         }
     }
 
     for (EgId j=0; j<edgenum; ++j)
-        if (cn[glm[j]].g[gla[j]].ind != j)
-            abort("Error by checking indma at ind: ", j);
+        ENSURE(cn[glm[j]].g[gla[j]].ind == j,
+               "Error by checking indma at ind: ", j);
 }
 
 
@@ -513,10 +520,10 @@ void IntegralTests<G>::
 chain_id(const itT it) const
 {
     for (ChId i=0; i<gr.chain_num(); ++i)
-        if (cn[i].idw != i) {
-            cn[i].print("should have ind ");
-            abort("Error 1: at iteration ", it," check.chain_id faied at ind ", i);
-        }
+        cn[i].ensure(cn[i].idw == i,
+            "should have ind ",
+            "Error 1: at iteration ", it," check.chain_id faied at ind ", i
+        );
 }
 
 
@@ -528,9 +535,9 @@ edges(const itT it) const
     for (const auto& m: cn) {
         egn += m.length();
         for (EgId a {}; const auto& o : m.g) {
-            if (o.w != m.idw)
-                abort("Error 1: at iteration ", it,
-                      " check.edges faied at w ", m.idw, " edge ind ", o.ind);
+            ENSURE(o.w == m.idw,
+                   "Error 1: at iteration ", it,
+                    " check.edges faied at w ", m.idw, " edge ind ", o.ind);
             if (o.indw != a++) {
                 m.print("wrong indw ");
                 abort("Error 2: at iteration ", it,
@@ -565,8 +572,8 @@ chain_g(const itT it) const
                               " check.chain_g faied at ind ", cn[i].g[r].ind);
         }
     }
-    if (egn != edgenum)
-        abort(" Error 5: at iter ", it, " check.chain_g faied at egn ", egn);
+    ENSURE(false, //egn == edgenum,
+           " Error 5: at iter ", it, " check.chain_g faied at egn ", egn);
 }
 
 

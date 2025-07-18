@@ -130,12 +130,11 @@ pull_free_end(
 
         if (s > 0 && source_was_dissolved) {
             const auto& d = pp.drv();
-            if(d.w == pp.src().w) {
-                const auto eS = Ends::opp(cn[d.w].ind2end(d.ind, d.egEnd));
-                pp.set_src(EndSlot {d.w, eS});
-            }
-            else
-                abort("s > 0 && source_was_dissolved");
+
+            ENSURE(d.w == pp.src().w, "s > 0 && source_was_dissolved");
+
+            const auto eS = Ends::opp(cn[d.w].ind2end(d.ind, d.egEnd));
+            pp.set_src(EndSlot {d.w, eS});
         }
     }
 
