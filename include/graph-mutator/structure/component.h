@@ -305,6 +305,22 @@ struct DisconnectedUnit {
         return visited;
     }
 
+    /**
+     * @brief Checks that \p cond is satisfied, else terminates program.
+     * @details Prints out the component using \p tag before terminating the
+     * program if \p cond is false. \p message is printed at termination.
+     * @tparam T Types of the message arguments.
+     * @param cond Condition to be checked.
+     * @param tag Tag to the component data to be printed if \p cond is false.
+     */
+    template<typename... T>
+    void ensure(
+        bool cond,
+        const std::string& tag,
+        T&&... message
+    ) const;
+
+
 private:
 
     Chains& cn;  ///< Reference to the parent chains container.
@@ -1318,6 +1334,22 @@ print_ww() const noexcept
     log_("");
 }
 
+
+template<typename Ch>
+template<typename... T>
+void DisconnectedUnit<Ch>::
+ensure(
+    bool cond,
+    const std::string& tag,
+    T&&... message
+) const
+{
+    if (!cond)
+        print(tag);
+
+    ABORT(cond, message...);
+
+}
 
 }  // namespace components
 

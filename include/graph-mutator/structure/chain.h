@@ -480,6 +480,21 @@ struct Chain {
      * @param ofs std::ofstream to write to.
      */
     void write(std::ofstream& ofs) const;
+
+    /**
+     * @brief Checks that \p cond is satisfied, else terminates program.
+     * @details Prints out the chain using \p tag before terminating the
+     * program if \p cond is false. \p message is printed at termination.
+     * @tparam T Types of the message arguments.
+     * @param cond Condition to be checked.
+     * @param tag Tag to the chain data to be printed if \p cond is false.
+     */
+    template<typename... T>
+    void ensure(
+        bool cond,
+        const std::string& tag,
+        T&&... message
+    ) const;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1028,7 +1043,7 @@ the_only_free_end() const noexcept -> EndId
     if (!is_connected_at(endA) &&  is_connected_at(endB)) return endA;
     if ( is_connected_at(endA) && !is_connected_at(endB)) return endB;
 
-    return Ends::Undefined;
+    return endUndef;
 }
 
 
@@ -1312,6 +1327,20 @@ write(std::ofstream& ofs) const
         a.write(ofs);
 }
 
+
+template<typename E4>
+template<typename... T>
+void Chain<E4>::
+ensure(
+    bool cond,
+    const std::string& tag,
+    T&&... message
+) const
+{
+    if (!cond)
+        print(tag);
+    ABORT(cond, message...);
+}
 
 using ChainBase = Chain<EdgeBase>;
 

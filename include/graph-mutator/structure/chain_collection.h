@@ -62,6 +62,21 @@ struct ChainContainer
 
     void print(const std::string& tag) const;
 
+    /**
+     * @brief Checks that \p cond is satisfied, else terminates program.
+     * @details Prints out the collection using \p tag before terminating the
+     * program if \p cond is false. \p message is printed at termination.
+     * @tparam T Types of the message arguments.
+     * @param cond Condition to be checked.
+     * @param tag Tag to the collection data to be printed if \p cond is false.
+     */
+    template<typename... T>
+    void ensure(
+        bool cond,
+        const std::string& tag,
+        T&&... message
+    ) const;
+
 private:
 
     using Base::data;
@@ -106,6 +121,21 @@ print(const std::string& tag) const
 {
     for (const auto& m: data)
         m.print(tag);
+}
+
+
+template<typename Ch>
+template<typename... T>
+void ChainContainer<Ch>::
+ensure(
+    bool cond,
+    const std::string& tag,
+    T&&... message
+) const
+{
+    if (!cond)
+        print(tag);
+    ABORT(message...);
 }
 
 
