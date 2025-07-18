@@ -463,8 +463,8 @@ loops() const
 {
     for (const auto& m: cn)
         m.ensure(
-            m.is_cycle() &&
-            m.length() < Chain::minCycleLength,
+            !(m.is_cycle() &&
+              m.length() < Chain::minCycleLength),
             " L ",
             "Forbidden loop found ","in chain ", m.idw, " printed above"
         );
