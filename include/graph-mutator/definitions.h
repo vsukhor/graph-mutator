@@ -163,6 +163,14 @@ static void abort(Args... args)
 }
 
 
+template<typename ...Args>
+static void abort_if(bool condition, Args... args)
+{
+    if (condition)
+        abort(args...);
+}
+
+
 template<typename... T>
 Msgr& operator<<(Msgr& msgr, T... values)
 {
