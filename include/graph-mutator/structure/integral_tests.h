@@ -301,11 +301,9 @@ components(const itT it) const
                    "at iteration ", it, " in g.c != cn.c for cn: ", w);
         }
 
-    const auto numeg = ct[ic].num_edges();
-
     vec2<CmpId> cc(gr.cmpt_num());
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic)
-        cc[ic].resize(numeg);
+        cc[ic].resize(ct[ic].num_edges());
 
     for (const auto& m: cn)
         for (const auto& o : m.g)
@@ -318,15 +316,16 @@ components(const itT it) const
         }
 
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic) {
-        ENSURE(std::accumulate(cc[ic].begin(), cc[ic].end(), EgId{}) == numeg,
-               "at iteration ", it,
-               " sum(cc[ic]) != component num edges for ic: ", ic);
-        ENSURE(*std::min_element(cc[ic].begin(), cc[ic].end()) == 1,
-               "at iteration ", it,
-               " minval(cc[ic]) != 1 for ic: ", ic);
-        ENSURE(*std::max_element(cc[ic].begin(), cc[ic].end()) == 1,
-               "at iteration ", it,
-               " maxval(cc[ic]) != 1 for ic: ", ic);
+        const auto c = cc[ic];
+
+        ENSURE(std::accumulate(c.begin(), c.end(), EgId{}) == ct[ic].num_edges(),
+               "at iteration ", it, " sum(c) != cmp num edges for ic: ", ic);
+
+        ENSURE(*std::min_element(c.begin(), c.end()) == 1,
+               "at iteration ", it, " minval(c) != 1 for ic: ", ic);
+
+        ENSURE(*std::max_element(c.begin(), c.end()) == 1,
+               "at iteration ", it, " maxval(c) != 1 for ic: ", ic);
     }
 
     for (auto& o: cc)
@@ -337,16 +336,18 @@ components(const itT it) const
             cc[o.c].push_back(o.indc);
 
     for (CmpId ic=0; ic<gr.cmpt_num(); ++ic) {
-        ENSURE(cc[ic].size() == numeg,
+        const auto c = cc[ic];
+        const auto numeg = ct[ic].num_edges();
+
+        ENSURE(c.size() == numeg,
+               "at iteration ", it, " c.size() != cmp num edges for ic: ", ic);
+
+        ENSURE(*std::min_element(c.begin(), c.end()) == 0,
+               "at iteration ", it, " minval(c) != 0 for ic: ", ic);
+
+        ENSURE(*std::max_element(c.begin(), c.end()) == ct[ic].num_edges()-1,
                "at iteration ", it,
-               " W:: cc[ic].size() != component num edges for ic: ", ic);
-        ENSURE(*std::min_element(cc[ic].begin(), cc[ic].end()) == 0,
-               "at iteration ", it,
-               " W:: minval( cc[ic] ) != 0 for ic: ", ic);
-        ENSURE(
-            *std::max_element(cc[ic].begin(), cc[ic].end()) == numeg-1,
-            "at iteration ", it,
-            " W:: maxval(cc[ic]) != component num edges - 1", " for ic: ", ic);
+               " maxval(c) != cmp num edges - 1", " for ic: ", ic);
     }
 
     for (const auto& cmp: ct) {
@@ -364,12 +365,13 @@ components(const itT it) const
             const auto& eg = cn[o.w].g[o.a];
 
             cmp.ensure(
-                eg.indc == i++,
+                eg.indc == i,
                 "ERR",
                 "at iteration ", it,
-                " eg.indc ", eg.indc, " != i ", i - 1,
+                " eg.indc ", eg.indc, " != i ", i,
                 " for ic: ", cmp.ind, " w ", o.w, " a ", o.a
             );
+            ++i;
             cmp.ensure(
                 eg.ind == o.i,
                 "ERR",
@@ -427,7 +429,7 @@ vertex_numbers(itT it) const
         return D == Deg3 ? k/3 :
                D == Deg4 ? k/4 : k;
     };
-é
+
     ENSURE(nvcn.template operator()<0>() == gr.vertices.template num<0>(),
            "vertex_numbers by chains test faled for D = ", 0,"  -- ",
             "expected: ", gr.vertices.template num<0>(),
@@ -462,7 +464,7 @@ loops() const
     for (const auto& m: cn)
         m.ensure(
             m.is_cycle() &&
-            m.length() < minCycleLength,
+            m.length() < Chain::minCycleLength,
             " L ",
             "Forbidden loop found ","in chain ", m.idw, " printed above"
         );
@@ -572,7 +574,7 @@ chain_g(const itT it) const
                               " check.chain_g faied at ind ", cn[i].g[r].ind);
         }
     }
-    ENSURE(false, //egn == edgenum,
+    ENSURE(egn == edgenum,
            " Error 5: at iter ", it, " check.chain_g faied at egn ", egn);
 }
 
