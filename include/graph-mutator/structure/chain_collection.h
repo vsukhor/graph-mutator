@@ -133,9 +133,10 @@ ensure(
     T&&... message
 ) const
 {
-    if (!cond)
+    if (!cond) {
         print(tag);
-    ABORT(message...);
+        ABORT(message...);
+    }
 }
 
 
