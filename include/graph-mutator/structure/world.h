@@ -68,6 +68,12 @@ struct World {
     );
 
     /**
+     * @brief Checks if the world is equilibrated.
+     * @return True if equilibrated, false otherwise.
+     */
+    auto is_equilibrated() const noexcept -> bool;
+
+    /**
      * @brief Outputs components of the universe to a text-formatted stream.
      * @param os Output stream.
      */
@@ -97,6 +103,14 @@ World(
 {
     graph.generate_single_chain_components(num, len);
     graph.update_books();
+}
+
+
+template<typename Chain>
+auto World<Chain>::
+is_equilibrated() const noexcept -> bool
+{
+    return graph.is_equilibrated();
 }
 
 

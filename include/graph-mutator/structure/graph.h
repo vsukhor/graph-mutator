@@ -343,6 +343,12 @@ struct Graph {
         const EndSlot& s1,
         const EndSlot& s2
     ) const noexcept -> bool;
+
+    /**
+     * @brief Checks if the graph is equilibrated.
+     * @return True if equilibrated, false otherwise.
+     */
+    auto is_equilibrated() const noexcept -> bool;
 };
 
 
@@ -1193,6 +1199,14 @@ inds_to_chain_link(
         }
     }
     return {{}};
+}
+
+
+template<typename Ch>
+auto Graph<Ch>::
+is_equilibrated() const noexcept -> bool
+{
+    return true;  // stub
 }
 
 
