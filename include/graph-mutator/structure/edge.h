@@ -50,7 +50,7 @@ template<typename> class Chain;
 template<Degree D>
 struct Edge {
 
-    static_assert(D <= maxDegree);
+    static_assert(is_implemented_degree<D>);
 
     static constexpr auto maxVertexDegree = maxDegree;
 

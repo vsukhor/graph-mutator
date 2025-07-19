@@ -50,14 +50,14 @@ template<Degree D,
 struct InExistingChain {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
-    static_assert (D <= maxDegree);
+    static_assert (is_implemented_degree<D>);
 
     static constexpr auto isNewChain = false;
 
     static constexpr auto I1 = undefined<Degree>;  ///< Degree of the 1st input vertex.
     static constexpr auto I2 = D;     ///< Degree of the 2nd input vertex.
     static constexpr auto J1 = Deg2;  ///< Degree of the 1st output vertex.
-    static constexpr auto J2 = D;     ///< No 2nd output vertex.
+    static constexpr auto J2 = D;     ///< The 2nd output vertex.
 
     static constexpr auto d = string_ops::str1<I2>;
     static constexpr auto shortName =

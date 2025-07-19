@@ -49,7 +49,7 @@ namespace graph_mutator::structure::vertices {
  * @tparam G Graph containing the vertices.
  */
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 class Collection {};
 
 
@@ -486,7 +486,7 @@ populate(
  * @return Collection of vertices in the specified compartment.
  */
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 auto for_compartment(
     const CmpId c,
     const Collection<D, G>& ns
@@ -510,7 +510,7 @@ auto for_compartment(
  * @return Index of the found vertex or an undefined Id.
  */
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 auto find_vertex(
     const typename Collection<D, G>::S& s,
     const Collection<D, G>& ns
@@ -532,7 +532,7 @@ auto find_vertex(
  * @param s Optional string prefix for each vertex printout.
  */
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 void print(const Collection<D, G>& ns,
            const std::string& s="") noexcept
 {

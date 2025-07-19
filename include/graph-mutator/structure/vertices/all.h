@@ -58,7 +58,7 @@ struct All {
 
     static_assert(maxDegree == 4);
 
-    template<Degree D> requires (is_implemented_degree<D>)
+    template<Degree D> requires is_implemented_degree<D>
 
     /// Tuple of vertex collections classified by vertex degree.
     using Container = std::tuple<Collection<0, G>,
@@ -107,18 +107,18 @@ struct All {
      * @param index Reference to global vertex counter.
      * graph compartment is being processed.
      * */
-    template<Degree D> requires (is_implemented_degree<D>)
+    template<Degree D> requires is_implemented_degree<D>
     auto create(
         Id& index,
         CmpId c
     ) noexcept;
 
-    template<Degree D> requires (is_implemented_degree<D>)
+    template<Degree D> requires is_implemented_degree<D>
     constexpr auto num() const noexcept -> szt;
 
     constexpr auto num() const noexcept -> szt;
 
-    template<Degree D> requires (is_implemented_degree<D>)
+    template<Degree D> requires is_implemented_degree<D>
     auto for_compartment(CmpId c) const noexcept -> Collection<D, G>;
 
     constexpr auto from_end_slot(const Degree d,
@@ -126,7 +126,7 @@ struct All {
 
     constexpr auto from_bulk_slot(const G::BulkSlot& s) const noexcept -> Id;
 
-    template<Degree D> requires (is_implemented_degree<D>)
+    template<Degree D> requires is_implemented_degree<D>
     void print(const std::string& s = "") const noexcept;
 
     void print(const std::string& s = "") const noexcept ;
@@ -191,7 +191,7 @@ create_on_bulks() noexcept
 
 
 template<typename G>
-template<Degree D> requires (is_implemented_degree<D>)
+template<Degree D> requires is_implemented_degree<D>
 auto All<G>::
 create(Id& index, const CmpId c) noexcept
 {
@@ -210,7 +210,7 @@ num() const noexcept -> szt
 
 
 template<typename G>
-template<Degree D> requires (is_implemented_degree<D>)
+template<Degree D> requires is_implemented_degree<D>
 constexpr
 auto All<G>::
 num() const noexcept -> szt
@@ -220,7 +220,7 @@ num() const noexcept -> szt
 
 
 template<typename G>
-template<Degree D> requires (is_implemented_degree<D>)
+template<Degree D> requires is_implemented_degree<D>
 auto All<G>::
 for_compartment(const CmpId c) const noexcept -> Collection<D, G>
 {
@@ -269,7 +269,7 @@ from_bulk_slot(const G::BulkSlot& s) const noexcept -> Id
 
 
 template<typename G>
-template<Degree D> requires (is_implemented_degree<D>)
+template<Degree D> requires is_implemented_degree<D>
 void All<G>::
 print(const std::string& s) const noexcept
 {

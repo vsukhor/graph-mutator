@@ -47,7 +47,7 @@ constexpr std::array shortNameStem {'v', '_', 'm', '_'};
  */
 template<Degree I1,
          Degree I2,
-         typename G>
+         typename G> requires are_compatible_degrees<I1, I2>
 struct From {};
 
 

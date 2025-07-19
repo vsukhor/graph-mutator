@@ -59,6 +59,7 @@ template<Degree J1_,
 struct To<J1_, J2_, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
+    static_assert(are_compatible_degrees<J1_, J2_>);
 
     static constexpr auto J1 = J1_;        ///< Degree of the 1st output vertex.
     static constexpr auto J2 = J2_;        ///< Degree of the 2nd output vertex.

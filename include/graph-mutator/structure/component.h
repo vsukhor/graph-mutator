@@ -201,7 +201,7 @@ struct DisconnectedUnit {
     constexpr auto num_edges() const noexcept -> EgId;
     constexpr auto num_chains() const noexcept -> ChId;
 
-    template<Degree D> requires (D <= maxDegree)
+    template<Degree D> requires is_implemented_degree<D>
     constexpr auto num_vertices() const noexcept -> szt;
 
     constexpr auto num_vertices() const noexcept -> szt;
@@ -513,7 +513,7 @@ num_chains() const noexcept -> ChId
 
 
 template<typename Ch>
-template<Degree D> requires (D <= maxDegree)
+template<Degree D> requires is_implemented_degree<D>
 constexpr
 auto DisconnectedUnit<Ch>::
 num_vertices() const noexcept -> szt

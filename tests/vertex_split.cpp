@@ -50,8 +50,8 @@ using ESlot = Chain::EndSlot;
 using BSlot = Chain::BulkSlot;
 
 /// Subclass to make protected members accessible for testing:
-template<unsigned D1,
-         unsigned D2,
+template<Degree D1,
+         Degree D2,
          typename G>
 struct VertexMerger
     : public graph_mutator::vertex_merger::From<D1, D2, G> {
@@ -65,11 +65,12 @@ struct VertexMerger
 /// Subclass to make protected members accessible for testing:
 /// Use Fusability rather than Divisibility to be able to produce
 /// branched vertex merger constracts needed for testing 'Divide'.
-template<unsigned D1,
-         unsigned D2,
+template<Degree D1,
+         Degree D2,
          typename G>
 struct VertexSplit
     : public graph_mutator::vertex_split::To<D1, D2, G> {
+    static_assert(are_compatible_degrees<D1, D2>);
 
     explicit VertexSplit(G& graph)
         : graph_mutator::vertex_split::To<D1, D2, G> {graph}
@@ -1828,14 +1829,14 @@ TEST_F(VertexSplitTest, Divide22_4Lines_AA_BB)
 
     // connect two linear chains at bulk vertices
 
-    VertexMerger<2, 2, G> merge22 {gr};
+    VertexMerger<Deg2, Deg2, G> merge22 {gr};
 
     merge22(BSlot{w1, a1},
             BSlot{w3, a2});
 
     // disconnect two of the 4 resulting chains at ends A of w5  and w6
 
-    VertexSplit<2, 2, G> divide {gr};
+    VertexSplit<Deg2, Deg2, G> divide {gr};
 
     divide(ESlot{w5, e},
            ESlot{w6, e});
@@ -1930,7 +1931,7 @@ TEST_F(VertexSplitTest, Divide22_4Lines_AB_AB)
 
     // disconnect two of the 4 resulting chains at end B of w1 and end A of w6
 
-    VertexSplit<2, 2, G> divide {gr};
+    VertexSplit<Deg2, Deg2, G> divide {gr};
 
     divide(ESlot{w6, eA},
            ESlot{w1, eB});

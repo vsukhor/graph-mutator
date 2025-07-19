@@ -59,7 +59,7 @@ struct VertexMerger
 
 /// Subclass to make protected members accessible for testing:
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 struct EdgeCreationNewChain
     : public graph_mutator::edge_creation::InNewChain<D, G> {
 
@@ -69,7 +69,7 @@ struct EdgeCreationNewChain
 };
 
 template<Degree D,
-         typename G> requires (is_implemented_degree<D>)
+         typename G> requires is_implemented_degree<D>
 struct EdgeCreationOldChain
     : public graph_mutator::edge_creation::InExistingChain<D, G> {
 

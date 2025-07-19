@@ -54,6 +54,7 @@ template<typename G>
 struct To<Deg1, Deg1, G> {
 
     static_assert(std::is_base_of_v<graph_mutator::structure::GraphBase, G>);
+    static_assert(are_compatible_degrees<Deg1, Deg1>);
 
     static constexpr auto J1 = Deg1;  ///< Degree of the 1st output vertex.
     static constexpr auto J2 = Deg1;  ///< Degree of the 2nd output vertex.

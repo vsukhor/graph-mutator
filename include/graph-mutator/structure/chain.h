@@ -375,7 +375,7 @@ struct Chain {
      * @tparam D Vertex degree.
      * @return the Number of vertices.
      */
-    template<Degree D> requires (D <= maxDegree)
+    template<Degree D> requires is_implemented_degree<D>
     constexpr auto num_vertices() const noexcept -> szt;
 
     /**
@@ -1162,7 +1162,7 @@ has_such_neig(const EndId e,
 
 
 template<typename E4>
-template<Degree D> requires (D <= maxDegree)
+template<Degree D> requires is_implemented_degree<D>
 constexpr
 auto Chain<E4>::
 num_vertices() const noexcept -> szt // D = 1, 2, 3, 4
