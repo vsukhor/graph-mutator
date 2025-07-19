@@ -28,14 +28,69 @@ constexpr std::array<Degree, maxDegree + Deg1> degrees {
     Deg0, Deg1, Deg2, Deg3, Deg4
 };
 
+// Leaf degree.
+
+constexpr Degree leafDegree {Deg1};
+
+template <Degree D>
+constexpr auto is_leaf_degree = D == leafDegree;
+
+template<Degree D>
+concept LeafDegree = D == leafDegree;
+
+// Bulk degree.
+
+constexpr std::array<Degree, 2> bulkDegrees {Deg0, Deg2};
+
+template <Degree D>
+constexpr auto is_bulk_degree =
+    std::find(bulkDegrees.cbegin(), bulkDegrees.cend(), D) != bulkDegrees.cend();
+
+template<Degree D>
+concept BulkDegree =
+    std::find(bulkDegrees.cbegin(), bulkDegrees.cend(), D) != bulkDegrees.cend();
+
+// Junction degree.
+
+constexpr std::array<Degree, 2> junctionDegrees {Deg3, Deg4};
+
+template <Degree D>
+constexpr auto is_junction_degree =
+    std::find(junctionDegrees.cbegin(), junctionDegrees.cend(), D) !=
+    junctionDegrees.cend();
+
+// End degree.
+
+template <Degree D>
+constexpr auto is_end_degree = is_leaf_degree<D> ||
+                               is_junction_degree<D>;
+
+template<Degree D>
+concept EndDegree = not BulkDegree<D>;
+
+// Effective degree.
+
 template <Degree D>
 constexpr auto effective_degree = (D == Deg0 ? Deg2 : D);
 
+
+/**
+ * @brief Checks if a degree is implemented.
+ * @tparam D Degree to check.
+ * @return True if implemented, false otherwise.
+ * @details A degree is implemented if it is less than or equal to maxDegree.
+ */
 template <Degree D>
 constexpr auto is_implemented_degree =
     D <= maxDegree &&
     D >= Deg0;
 
+
+/**
+ * @brief Checks if two degrees are compatible.
+ * @tparam D1 First degree.
+ * @tparam D2 Second degree.
+ */
 template <Degree D1,
           Degree D2>
 constexpr auto are_compatible_degrees =
@@ -43,36 +98,6 @@ constexpr auto are_compatible_degrees =
     D2 >= Deg0 &&
     effective_degree<D1> + effective_degree<D2> <= maxDegree;
 
-constexpr std::array<Degree, 2> bulkDegrees {Deg0, Deg2};
-template <Degree D>
-constexpr auto is_bulk_degree =
-    std::find(bulkDegrees.begin(), bulkDegrees.end(), D) != bulkDegrees.end();
-
-constexpr Degree leafDegree {Deg1};
-template <Degree D>
-constexpr auto is_leaf_degree = D == leafDegree;
-
-template<Degree D>
-concept LeafDegree = D == leafDegree;
-
-constexpr std::array<Degree, 2> junctionDegrees {Deg3, Deg4};
-template <Degree D>
-constexpr auto is_junction_degree =
-    std::find(junctionDegrees.begin(), junctionDegrees.end(), D) !=
-    junctionDegrees.end();
-
-
-template <Degree D>
-constexpr auto is_end_degree = is_leaf_degree<D> ||
-                               is_junction_degree<D>;
-template<Degree D>
-concept BulkDegree =
-    std::find(bulkDegrees.cbegin(), bulkDegrees.cend(), D) !=
-    bulkDegrees.cend();
-
-
-template<Degree D>
-concept EndDegree = not BulkDegree<D>;
 
 }  // namespace structure::vertices::degrees
 
